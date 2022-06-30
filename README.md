@@ -26,7 +26,7 @@ The web application that we are going to create is called Fight club, which is a
 
 - [Clement Tran](https://github.com/CTprogram)
 - [Abdullah Khan](https://github.com/khanm253)
-- [Sahil Hakimi](https://github.com/SahilHakimiUofT)
+- [Sahil Hakimi 1005262243](https://github.com/SahilHakimiUofT)
 
 
 
