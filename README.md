@@ -16,7 +16,12 @@ The web application that we are going to create is called Fight club, which is a
   Backend:
   For the backend of our tech stack we will be using a MongoDB database to store all of our collections, as well as Nodejs/Express for our backend server. We will also be using additional libraries such as Passport.js for OAuth, Mongoose, Socket.io for real time interactions, express-validator / other libraries with security in mind, etc. 
 
-##Method of deployment: Docker + Kubernetes
+## Method of deployment: Docker + Kubernetes
+
+  To help us with our deployment we will be referring to online resources to help us with our process. 
+  
+## Key Features of application that we will aim to complete by beta:
+  The key functionality that we aim to complete for our beta version is the actual game functionality in our website in which we allow users to play with each other in real time, for our beta version we aim to allow users to either invite friends or play in random public matches with other users. We also aim to have a login/sign up system done for our beta that has OAuth 2.0 for a major provider such as Google/Facebook/Twitter, etc. 
 
 
 
