@@ -15,55 +15,54 @@ app.use(bodyParser.json());
 app.use(cors());
 
 io.on("connection", (client) => {
-  console.log('Client id:', client.id);
+  console.log("Client id:", client.id);
 
   const state = initNewGameState();
 
-  client.on('keyDown', keyDown);
-  client.on('keyUp', keyUp);
+  client.on("keyDown", keyDown);
+  client.on("keyUp", keyUp);
 
   function keyDown(key) {
     switch (key) {
-      case 'a':
-        state.players[0].velocity.x = -5;
+      case "a":
+        state.players[0].velocity.x = -10;
         break;
-      case 'd':
-        state.players[0].velocity.x = 5;
+      case "d":
+        state.players[0].velocity.x = 10;
         break;
-      case 'w':
+      case "w":
         state.players[0].velocity.y = -20;
         break;
     }
   }
 
-  function keyUp (key) {
+  function keyUp(key) {
     switch (key) {
-      case 'a':
+      case "a":
         state.players[0].velocity.x = 0;
         break;
-      case 'd':
+      case "d":
         state.players[0].velocity.x = 0;
         break;
     }
   }
-  
+
   startGame(state, client);
 });
 
 function startGame(state, client) {
   const interval = setInterval(() => {
     const decision = gameLoop(state);
-    
-    if(!decision) {
+
+    if (!decision) {
       console.log(JSON.stringify(state));
-      client.emit('gameSnapShot', JSON.stringify(state));
+      client.emit("gameSnapShot", JSON.stringify(state));
     } else {
       clearInterval(interval);
-      client.emit('gameEnded', decision);
+      client.emit("gameEnded", decision);
     }
   }, 1000 / FRAME_RATE);
 }
-
 
 httpServer.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
