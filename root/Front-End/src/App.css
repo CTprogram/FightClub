@@ -1,5 +1,29 @@
 .App {
+  display: flex;
+  flex-direction: column;
   text-align: center;
+
+}
+
+.Menu{
+  background-color: black;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-around;
+  position:static;
+  height: 80px;
+}
+
+.MenuItems{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 10vmin;
+}
+
+.LogoContainer{
+  display:flex;
+  flex-direction: row;
 }
 
 .App-logo {
@@ -39,4 +63,68 @@
 
 button {
   font-size: calc(10px + 2vmin);
+}
+
+.UserMenu{
+  padding-top: 100px;
+}
+
+.CardContainer{
+  position: relative;
+  margin-top: 220px;
+  font-size: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.Card{
+  background-color: white;
+  border: 2px solid black;
+  padding: 0px 15px 0px 15px;
+  width: 400px;
+  height: 400px;
+}
+
+.UserMenuContainer{
+  display: flex;
+  flex-direction: row;
+}
+
+.Username{
+  padding-top: 10px;
+}
+
+.form-element{
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+.form-element-title{
+  font-size:2em;
+
+  text-align: left;
+  padding-left: 0px;
+}
+
+.form-title{
+  font-size: 1.2rem;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.LoginFormContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+.signBtn {
+  margin-top: 20px;
+  background-color: white;
+  border: 2px solid black;
+  color: black;
+}
+.signBtn:hover{
+  background-color: black;
+  color: white;
 }
