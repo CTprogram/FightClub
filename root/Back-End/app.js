@@ -37,6 +37,15 @@ io.on("connection", (client) => {
           state.players[0].onGround = false;
         }
         break;
+      case "s":
+        if(!state.players[0].attacking) {
+          state.players[0].attacking = true;
+
+          setTimeout(() => {
+            state.players[0].attacking = false;
+          }, (1000 / FRAME_RATE) * 3);
+        }
+        break;
     }
   }
 
