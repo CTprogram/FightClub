@@ -21,6 +21,8 @@ const paintGame = (state, canvas, ctx) => {
   ctx.fillStyle = BG_COLOUR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   const player = new Sprite(state.players[0], ctx);
+  const enemy = new Sprite(state.players[1], ctx);
   player.draw();
+  enemy.draw();
 };
 export { handleGameState };

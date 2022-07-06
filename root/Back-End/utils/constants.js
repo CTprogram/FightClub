@@ -1,12 +1,12 @@
 //Game constants
 const FRAME_RATE = 60;
-const CHARACTER_HORIZONTAL_SPEED = 5;
+const CHARACTER_HORIZONTAL_SPEED = 10;
 const CHARACTER_JUMP_OFFSET = -20;
-const GRAVITY = 0.3;
+const GRAVITY = 0.7;
 const PLAYER_COLOR = "red";
 const ENEMY_COLOR = "green";
-const GAME_SCREEN_HEIGHT = 1024;
-const GAME_SCREEN_WIDTH = 570;
+const GAME_SCREEN_HEIGHT = 576;
+const GAME_SCREEN_WIDTH = 1024;
 
 module.exports = {
   FRAME_RATE,

@@ -6,7 +6,7 @@ const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
-const { FRAME_RATE } = require("./utils/constants");
+const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET } = require("./utils/constants");
 const port = 3001;
 
 //middleware
@@ -23,15 +23,19 @@ io.on("connection", (client) => {
   client.on("keyUp", keyUp);
 
   function keyDown(key) {
+    console.log(key, ' pressed');
     switch (key) {
       case "a":
-        state.players[0].velocity.x = -10;
+        state.players[0].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
         break;
       case "d":
-        state.players[0].velocity.x = 10;
+        state.players[0].velocity.x = CHARACTER_HORIZONTAL_SPEED;
         break;
       case "w":
-        state.players[0].velocity.y = -20;
+        if(state.players[0].onGround){
+          state.players[0].velocity.y = CHARACTER_JUMP_OFFSET;
+          state.players[0].onGround = false;
+        }
         break;
     }
   }
