@@ -3,8 +3,8 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Game from "./components/game/Game";
 import HealthBar from "./components/game/gameUI/HealthBar";
-import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Link, Outlet } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -21,15 +21,13 @@ import SportsMmaIcon from "@mui/icons-material/SportsMma";
 import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
 import styles from "./App.module.css";
-import PageRouter from "./components/PageRouter";
+
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Account", "Logout"];
-
 
 function App() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, setUser] = React.useState({});
-  
 
   const openUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -40,8 +38,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <div className={styles.App}>
+    <div className={styles.App}>
       <AppBar className={styles.Menu}>
         <Toolbar disableGutters className={styles.Menu}>
           <div className={styles.LogoContainer}>
@@ -49,13 +46,10 @@ function App() {
             <div className={styles.LogoTitle}>Fight Club</div>
           </div>
 
-          {user && user.username &&(
+          {user && user.username && (
             <Box className={styles.Menu}>
               {menuItems.map((item) => (
-                <Button
-                  key={item}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
+                <Button key={item} sx={{ my: 2, color: "white", display: "block" }}>
                   {item}
                 </Button>
               ))}
@@ -98,13 +92,10 @@ function App() {
             </Box>
           )}
         </Toolbar>
-        </AppBar>
-        <Game />
-      </div>
-    </BrowserRouter>
-    
+      </AppBar>
+      <Game />
+      <Outlet />
+    </div>
   );
 }
 export default App;
-
-

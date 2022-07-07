@@ -6,7 +6,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 
 const SignUp = () => {
-
   const {
     register,
     handleSubmit,
@@ -22,7 +20,7 @@ const SignUp = () => {
   } = useForm();
 
   //Will be used for Login
-  
+
   const onSubmitRegister = async (data) => {
     console.log(data);
     var formData = new FormData();
@@ -36,13 +34,13 @@ const SignUp = () => {
       object[key] = value;
     });
 
-    const response = await fetch('http://localhost:3001/api/user/register/', {
+    const response = await fetch("http://localhost:3001/api/user/register/", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
-      mode: 'cors',
+      credentials: "include",
+      mode: "cors",
       body: JSON.stringify(object),
     });
 
@@ -51,22 +49,17 @@ const SignUp = () => {
 
     if (response.status === 201) {
       document.getElementById("register-form").reset();
-    }
-    else if (response.status === 409) {
+    } else if (response.status === 409) {
       if (responseData.error.includes("username")) {
         //username is taken
-      }
-      else {
+      } else {
         //email is taken
       }
-    }
-    else if (response.status ===500) {
+    } else if (response.status === 500) {
       console.log("Server error");
-    }
-    else {
+    } else {
       //unknown error
     }
-
 
     // We want to reload after successful query to display logged in screen
     // window.location.reload();
@@ -74,63 +67,25 @@ const SignUp = () => {
 
   return (
     <div className={styles.CardContainer}>
-        <Card className={styles.Card}>
-          <div className={styles.formTitle}>Signup</div>
-          <form
-            id="register-form"
-            className={styles.formContainer}
-            onSubmit={handleSubmit(onSubmitRegister)}
-          >
-            <Typography className={styles.formElementTitle}>Username</Typography>
-            <input
-              type="text"
-              id="registerUsername"
-              autoComplete="username"
-              {...register("username", { maxLength: 30 })}
-              className={styles.formElement}
-              placeholder="Enter a username"
-              required
-            />
-            {errors.name && errors.name.type === "maxLength" && (
-              <span>Max length exceeded</span>
-            )}
-            <Typography className={styles.formElementTitle}> Password</Typography>
-            <input
-              type="password"
-              id="registerPassword"
-              autoComplete="new-password"
-              {...register("password")}
-              className={styles.formElement}
-              placeholder="Enter a password"
-              required
-            />
+      <Card className={styles.Card}>
+        <div className={styles.formTitle}>Signup</div>
+        <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
+          <Typography className={styles.formElementTitle}>Username</Typography>
+          <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
+          {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
+          <Typography className={styles.formElementTitle}> Password</Typography>
+          <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
 
-            <Typography className={styles.formElementTitle}> Email</Typography>
-            <input
-              type="email"
-              id="email"
-              {...register("email")}
-              autoComplete="email"
-              className={styles.formElement}
-              placeholder="Enter your Email"
-              required
-            />
+          <Typography className={styles.formElementTitle}> Email</Typography>
+          <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
 
-            <button
-              id="signup"
-              name="action"
-              className={styles.signBtn}
-              variant="contained"
-              size="large"
-            >
-              Sign up
-            </button>
-          </form>
+          <button id="signup" name="action" className={styles.signBtn} variant="contained" size="large">
+            Sign up
+          </button>
+        </form>
       </Card>
     </div>
-    );
-  };
-  
-  export default SignUp;
+  );
+};
 
-
+export default SignUp;
