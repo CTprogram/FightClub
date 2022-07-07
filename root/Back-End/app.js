@@ -1,6 +1,11 @@
 //imports
 const express = require("express");
+const cookie = require("cookie");
 const app = express();
+const mongoose = require("mongoose");
+const userRoutes = require("./Routes/UserRoutes");
+
+//Middleware to parse
 const httpServer = require("http").Server(app);
 const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
@@ -76,6 +81,28 @@ function startGame(state, client) {
     }
   }, 1000 / FRAME_RATE);
 }
+
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
+//Enables session
+const session = require("express-session");
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+//connect to mongoDB
+mongoose.connect("mongodb://localhost:27017/", () =>
+  console.log("Connected to db!")
+);
+
+//Middleware
+app.use("/api/user/", userRoutes);
+
+const http = require("http");
 
 httpServer.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
