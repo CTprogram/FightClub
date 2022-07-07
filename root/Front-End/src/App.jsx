@@ -22,8 +22,9 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
+
 const menuItems = ["Home", "Leaderboard"];
-const profileItems = ["Profile", "Account", "Logout"];
+const profileItems = ["Account", "Logout"];
 import styles from "./App.module.css";
 
 
@@ -55,11 +56,13 @@ function App() {
       object[key] = value;
     });
 
-    const response = await fetch('http://localhost:3000/api/user/login/', {
+    const response = await fetch('http://localhost:3001/api/user/login/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
+      mode: 'cors',
       body: JSON.stringify(object),
     });
     const responseData = await response.json();
@@ -91,11 +94,13 @@ function App() {
       object[key] = value;
     });
 
-    const response = await fetch('http://localhost:3000/api/user/register/', {
+    const response = await fetch('http://localhost:3001/api/user/register/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
+      mode: 'cors',
       body: JSON.stringify(object),
     });
 
@@ -144,8 +149,8 @@ function App() {
       <AppBar className={styles.Menu}>
         <Toolbar disableGutters className={styles.Menu}>
           <div className={styles.LogoContainer}>
-            <SportsMmaIcon />
-            <Typography variant="h6" className={styles.LogoTitle}>Fight Club</Typography>
+            {/* <SportsMmaIcon className={styles.FightLogo} /> */}
+            <div className={styles.LogoTitle}>Fight Club</div>
           </div>
 
           {user && user.username &&(
@@ -203,7 +208,7 @@ function App() {
         !user.username && 
         <div className={styles.CardContainer}>
         <Card className={styles.Card}>
-          <Typography className={styles.formTitle}>Login</Typography>
+          <div className={styles.formTitle}>Login</div>
           <form
             id="login-form"
             className={styles.formContainer}
@@ -243,7 +248,7 @@ function App() {
         </Card>
 
         <Card className={styles.Card}>
-          <Typography className={styles.formTitle}>Signup</Typography>
+          <div className={styles.formTitle}>Signup</div>
           <form
             id="register-form"
             className={styles.formContainer}

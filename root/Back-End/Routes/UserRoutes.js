@@ -22,6 +22,7 @@ router.post("/register/", function (req, res, next) {
       mandatory: missingFields,
     });
   }
+  var username = req.body.username;
   var password = req.body.password;
   user.find(
     { $or: [{ email: req.body.email }, { username: req.body.username }] },
@@ -69,6 +70,8 @@ router.post("/register/", function (req, res, next) {
                 .json({ username: req.body.username, email: req.body.email });
             })
             .catch((err) => {
+              console.log(err);
+              console.log("error in here");
               return res.status(500).json({ error: err });
             });
         });
@@ -99,7 +102,6 @@ router.post("/login/", function (req, res, next) {
   var password = req.body.password;
   user.findOne({ username: req.body.username }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
-    console.log(userDoc);
     if (!userDoc) return res.status(401).json({ err: "Invalid username" });
 
     bcrypt.compare(password, userDoc.password, function (err, result) {
