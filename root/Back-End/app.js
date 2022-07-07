@@ -1,4 +1,5 @@
 const express = require("express");
+const cookie = require("cookie");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
@@ -6,10 +7,21 @@ const bodyParser = require("body-parser");
 
 const userRoutes = require("./Routes/UserRoutes");
 
+//Middleware to parse
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//connect to DB
+//Enables session
+const session = require("express-session");
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+//connect to mongoDB
 mongoose.connect("mongodb://localhost:27017/", () =>
   console.log("Connected to db!")
 );

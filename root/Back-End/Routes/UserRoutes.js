@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
+const cookie = require("cookie");
 const router = express.Router();
 const user = require("../db/Models/UserSchema");
 
@@ -55,6 +56,14 @@ router.post("/register/", function (req, res, next) {
           regUserItem
             .save()
             .then((data) => {
+              req.session.username = username;
+              res.setHeader(
+                "Set-Cookie",
+                cookie.serialize("username", username, {
+                  path: "/",
+                  maxAge: 60 * 60 * 24 * 7,
+                })
+              );
               return res
                 .status(201)
                 .json({ username: req.body.username, email: req.body.email });
@@ -69,9 +78,46 @@ router.post("/register/", function (req, res, next) {
 });
 
 router.post("/login/", function (req, res, next) {
-  var invalidFields = [];
+  const requiredSchema = ["username", "password"];
+  let missingFields = [];
 
-  res.status(200).json({ message: "working", status: 200 });
+  for (let j = 0; j < requiredSchema.length; j++) {
+    let requiredSchemaItem = requiredSchema[j];
+
+    if (!(requiredSchemaItem in req.body)) {
+      missingFields.push(requiredSchemaItem);
+    }
+  }
+
+  if (missingFields.length > 0) {
+    return res.status(400).json({
+      error: "Invalid mandatory fields",
+      mandatory: missingFields,
+    });
+  }
+  var username = req.body.username;
+  var password = req.body.password;
+  user.findOne({ username: req.body.username }, function (err, userDoc) {
+    if (err) return res.status(500).json({ error: err });
+    console.log(userDoc);
+    if (!userDoc) return res.status(401).json({ err: "Invalid username" });
+
+    bcrypt.compare(password, userDoc.password, function (err, result) {
+      if (err) return res.status(500).json({ error: err, status: 500 });
+      if (!result) return res.status(401).json({ err: "Invalid Password" });
+      // initialize cookie
+
+      req.session.username = username;
+      res.setHeader(
+        "Set-Cookie",
+        cookie.serialize("username", username, {
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        })
+      );
+      return res.status(200).json({ username: username });
+    });
+  });
 });
 
 module.exports = router;

@@ -44,11 +44,42 @@ function App() {
     formState: { errors: errors2 },
   } = useForm();
 
-  const onSubmitLogin = (data) => {
-    console.log(data);
+  const onSubmitLogin = async (data) => {
+    var formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("password", data.password);
+
+    // convert formData to JSON since that is what the server looks for
+    var object = {};
+    formData.forEach(function (value, key) {
+      object[key] = value;
+    });
+
+    const response = await fetch('http://localhost:3000/api/user/login/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(object),
+    });
+    const responseData = await response.json();
+    console.log(responseData);
+    
+    if (response.status === 200) {
+      setUser(responseData);
+      document.getElementById("login-form").reset();
+    }
+    else if (response.status === 401) {
+      //invalid password or email
+    }
+    else if (response.status === 400) {
+      
+    }
+
   };
 
   const onSubmitRegister = async (data) => {
+    console.log(data);
     var formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
@@ -71,12 +102,25 @@ function App() {
     const responseData = await response.json();
     console.log(responseData);
 
-    if (response.status < 200 || response.status > 300) {
-      throw responseData;
+    if (response.status === 201) {
+      setUser(responseData);
+      document.getElementById("register-form").reset();
+    }
+    else if (response.status === 409) {
+      if (responseData.error.includes("username")) {
+        //username is taken
+      }
+      else {
+        //email is taken
+      }
+    }
+    else if (response.status ===500) {
+      console.log("Server error");
+    }
+    else {
+      //unknown error
     }
 
-    setUser(responseData);
-    document.getElementById("register-form").reset();
 
     // We want to reload after successful query to display logged in screen
     // window.location.reload();
@@ -101,11 +145,11 @@ function App() {
         <Toolbar disableGutters className={styles.Menu}>
           <div className={styles.LogoContainer}>
             <SportsMmaIcon />
-            <Typography variant="h6">Fight Club</Typography>
+            <Typography variant="h6" className={styles.LogoTitle}>Fight Club</Typography>
           </div>
 
           {user && user.username &&(
-            <Box className={styles.menuItems}>
+            <Box className={styles.Menu}>
               {menuItems.map((item) => (
                 <Button
                   key={item}
@@ -155,7 +199,9 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <div className={styles.CardContainer}>
+      {
+        !user.username && 
+        <div className={styles.CardContainer}>
         <Card className={styles.Card}>
           <Typography className={styles.formTitle}>Login</Typography>
           <form
@@ -250,6 +296,9 @@ function App() {
           </form>
         </Card>
       </div>
+      }
+      
+
     </div>
   );
 }
