@@ -1,0 +1,21 @@
+.overlay {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.container {
+  display: inline-block;
+  position: relative;
+}
+.myCanvas {
+  position: relative;
+}

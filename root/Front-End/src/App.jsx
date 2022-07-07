@@ -1,6 +1,8 @@
 import { useState } from "react";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
+import Game from "./components/game/Game";
+import HealthBar from "./components/game/gameUI/HealthBar";
 import { Link as RouterLink, LinkProps as RouterLinkProps, useHistory } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Box from "@mui/material/Box";
@@ -96,11 +98,13 @@ function App() {
             </Box>
           )}
         </Toolbar>
-      </AppBar>
-        <PageRouter/>
+        </AppBar>
+        <Game />
       </div>
     </BrowserRouter>
     
   );
 }
 export default App;
+
+

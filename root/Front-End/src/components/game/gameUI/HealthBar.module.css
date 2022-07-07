@@ -1,0 +1,36 @@
+.healthBar__outer {
+  background-color: rgb(255, 0, 0);
+  border-radius: 0.5rem;
+  display: flex;
+}
+
+.healthBar__outer__enemy {
+  justify-content: flex-end;
+}
+
+.healthBar__inner {
+  background-color: rgb(9, 255, 0);
+  height: 50px;
+  border-radius: 0.5rem;
+  transition: 1s ease;
+  transition-delay: 0.1s;
+}
+
+.healthContainer {
+  display: flex;
+  flex-direction: column;
+}
+.flexBox {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.wrappingProfile {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.avatar {
+  margin-right: 5px;
+}
