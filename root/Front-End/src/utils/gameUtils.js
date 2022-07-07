@@ -1,6 +1,6 @@
 const BG_COLOUR = "#231f20";
 class Sprite {
-  constructor({ position, velocity, attackBox , attacking}, ctx) {
+  constructor({ position, velocity, attackBox, attacking }, ctx) {
     this.position = position;
     this.velocity = velocity;
     this.attackBox = attackBox;
@@ -12,9 +12,9 @@ class Sprite {
     this.ctx.fillStyle = "red";
     this.ctx.fillRect(this.position.x, this.position.y, 50, 150);
 
-    if(this.attacking) {
+    if (this.attacking) {
       this.ctx.fillStyle = "green";
-      this.ctx.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width , this.attackBox.height);
+      this.ctx.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
     }
   }
 }
