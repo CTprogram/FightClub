@@ -39,6 +39,7 @@ io.on("connection", (client) => {
     client.role = 1;
     clientToRoom[client.id] = roomId;
     roomToState[roomId] = state;
+    client.emit("init", roomId);
   }
 
   function joinRoom (roomId) {
@@ -55,7 +56,7 @@ io.on("connection", (client) => {
         client.role = 2;
         clientToRoom[client.id] = roomId;
         const roomState = state[roomId];
-        if(roomState) startGame(roomState, client);
+        if(roomState) startGame(roomState, roomId);
       } else if (numOfUsers > 1) {
         client.emit('gameInProgress', roomId);
       } else {
@@ -104,16 +105,16 @@ io.on("connection", (client) => {
   }
 });
 
-function startGame(state, client) {
+function startGame(state, roomId) {
   const interval = setInterval(() => {
     const decision = gameLoop(state);
 
     if (!decision) {
       console.log(JSON.stringify(state));
-      client.emit("gameSnapShot", JSON.stringify(state));
+      io.sockets.in(roomId).emit('gameSnapShot', JSON.stringify(state));
     } else {
       clearInterval(interval);
-      client.emit("gameEnded", decision);
+      io.sockets.in(roomId).emit('gameEnded', decision);
     }
   }, 1000 / FRAME_RATE);
 
