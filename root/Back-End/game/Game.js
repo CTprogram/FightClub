@@ -53,7 +53,8 @@ function initNewGameState() {
                     offset: 50
                 }
             }
-        ]
+        ],
+        timeLeft: 60
     }
 }
 
