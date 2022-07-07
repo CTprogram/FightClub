@@ -6,9 +6,6 @@ const bodyParser = require("body-parser");
 
 const userRoutes = require("./Routes/UserRoutes");
 
-//Middleware
-app.use("/api/user/", userRoutes);
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -16,6 +13,9 @@ app.use(bodyParser.json());
 mongoose.connect("mongodb://localhost:27017/", () =>
   console.log("Connected to db!")
 );
+
+//Middleware
+app.use("/api/user/", userRoutes);
 
 const http = require("http");
 app.listen(port, function (err) {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import logo from "./logo.svg";
-import "./App.css";
 import { useForm } from "react-hook-form";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
@@ -22,12 +21,15 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import axios from "axios";
+import { formHelperTextClasses } from "@mui/material";
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Profile", "Account", "Logout"];
+import styles from "./App.module.css";
+
 
 function App() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [user, setUser] = React.useState(false);
+  const [user, setUser] = React.useState({});
   // Will be used for signUp
   const {
     register,
@@ -47,32 +49,37 @@ function App() {
   };
 
   const onSubmitRegister = async (data) => {
-    var formdata = new FormData();
-    formdata.append("username", data.username);
-    formdata.append("password", data.password);
+    var formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("password", data.password);
+    formData.append("email", data.email);
 
     // convert formData to JSON since that is what the server looks for
     var object = {};
-    formdata.forEach(function (value, key) {
+    formData.forEach(function (value, key) {
       object[key] = value;
     });
-    console.log(object);
 
-    // const response = await fetch('http://localhost:3000/api/user/register/', {
-    //   method: "POST",
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(object),
-    // });
-
-    // console.log(response.data);
-    axios.post("/api/user/register/",object).then((resp) => {
-      console.log(resp.data);
+    const response = await fetch('http://localhost:3000/api/user/register/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(object),
     });
 
+    const responseData = await response.json();
+    console.log(responseData);
 
+    if (response.status < 200 || response.status > 300) {
+      throw responseData;
+    }
+
+    setUser(responseData);
     document.getElementById("register-form").reset();
+
+    // We want to reload after successful query to display logged in screen
+    // window.location.reload();
   };
   // const [loginInfo, handleSignin] = useForm();
 
@@ -87,17 +94,18 @@ function App() {
   // const onSignIn = () => {
   //   console.log(loginInfo);
   // };
+  
   return (
-    <div className="App">
-      <AppBar className="Menu">
-        <Toolbar disableGutters className="Menu">
-          <div className="LogoContainer">
+    <div className={styles.App}>
+      <AppBar className={styles.Menu}>
+        <Toolbar disableGutters className={styles.Menu}>
+          <div className={styles.LogoContainer}>
             <SportsMmaIcon />
             <Typography variant="h6">Fight Club</Typography>
           </div>
 
-          {user && (
-            <Box className="MenuItems">
+          {user && user.username &&(
+            <Box className={styles.menuItems}>
               {menuItems.map((item) => (
                 <Button
                   key={item}
@@ -109,8 +117,8 @@ function App() {
             </Box>
           )}
 
-          {user && (
-            <Box className="UserMenuContainer">
+          {user && user.username && (
+            <Box className={styles.UserMenuContainer}>
               <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu}>
                   <Avatar alt="" src="" />
@@ -118,7 +126,7 @@ function App() {
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
-                className="UserMenu"
+                className={styles.userMenu}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -139,39 +147,39 @@ function App() {
                   </MenuItem>
                 ))}
               </Menu>
-              <Typography variant="h6" className="Username">
-                John
+              <Typography variant="h6" className={styles.Username}>
+                {user.username}
               </Typography>
             </Box>
           )}
         </Toolbar>
       </AppBar>
 
-      <div className="CardContainer">
-        <Card className="Card">
-          <Typography className="form-title">Login</Typography>
+      <div className={styles.CardContainer}>
+        <Card className={styles.Card}>
+          <Typography className={styles.formTitle}>Login</Typography>
           <form
             id="login-form"
-            className="LoginFormContainer"
+            className={styles.formContainer}
             onSubmit={handleSubmit2(onSubmitLogin)}
           >
-            <Typography className="form-element-title">Username</Typography>
+            <Typography className={styles.formElementTitle}>Username</Typography>
             <input
               type="text"
               autoComplete="username"
               name="username"
               {...register2("username", { maxLength: 30 })}
-              className="form-element"
+              className={styles.formElement}
               placeholder="Enter a username"
               required
             />
-            <Typography className="form-element-title"> Password</Typography>
+            <Typography className={styles.formElementTitle}> Password</Typography>
             <input
               type="password"
               autoComplete="current-password"
               name="password"
               {...register2("password")}
-              className="form-element"
+              className={styles.formElement}
               placeholder="Enter a password"
               required
             />
@@ -179,7 +187,7 @@ function App() {
             <button
               id="signin"
               name="action"
-              className="signBtn"
+              className={styles.signBtn}
               variant="contained"
               size="large"
             >
@@ -188,44 +196,44 @@ function App() {
           </form>
         </Card>
 
-        <Card className="Card">
-          <Typography className="form-title">Signup</Typography>
+        <Card className={styles.Card}>
+          <Typography className={styles.formTitle}>Signup</Typography>
           <form
             id="register-form"
-            className="LoginFormContainer"
+            className={styles.formContainer}
             onSubmit={handleSubmit(onSubmitRegister)}
           >
-            <Typography className="form-element-title">Username</Typography>
+            <Typography className={styles.formElementTitle}>Username</Typography>
             <input
               type="text"
               id="registerUsername"
               autoComplete="username"
               {...register("username", { maxLength: 30 })}
-              className="form-element"
+              className={styles.formElement}
               placeholder="Enter a username"
               required
             />
             {errors.name && errors.name.type === "maxLength" && (
               <span>Max length exceeded</span>
             )}
-            <Typography className="form-element-title"> Password</Typography>
+            <Typography className={styles.formElementTitle}> Password</Typography>
             <input
               type="password"
               id="registerPassword"
               autoComplete="new-password"
               {...register("password")}
-              className="form-element"
+              className={styles.formElement}
               placeholder="Enter a password"
               required
             />
 
-            <Typography className="form-element-title"> Email</Typography>
+            <Typography className={styles.formElementTitle}> Email</Typography>
             <input
               type="email"
               id="email"
               {...register("email")}
               autoComplete="email"
-              className="form-element"
+              className={styles.formElement}
               placeholder="Enter your Email"
               required
             />
@@ -233,7 +241,7 @@ function App() {
             <button
               id="signup"
               name="action"
-              className="signBtn"
+              className={styles.signBtn}
               variant="contained"
               size="large"
             >

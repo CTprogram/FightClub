@@ -26,45 +26,6 @@
   flex-direction: row;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-button {
-  font-size: calc(10px + 2vmin);
-}
-
 .UserMenu{
   padding-top: 100px;
 }
@@ -95,25 +56,25 @@ button {
   padding-top: 10px;
 }
 
-.form-element{
+.formElement{
   margin-bottom: 10px;
   font-size: 25px;
 }
 
-.form-element-title{
+.formElementTitle{
   font-size:2em;
 
   text-align: left;
   padding-left: 0px;
 }
 
-.form-title{
+.formTitle{
   font-size: 1.2rem;
   font-family: sans-serif;
   font-weight: bold;
 }
 
-.LoginFormContainer{
+.formContainer{
   display: flex;
   flex-direction: column;
 }
