@@ -89,11 +89,11 @@ function gameLoop(state) {
     }
 
     if(successfulAttack({attacker: player, attacked: enemy})) {
-        enemy.health -= 20;
+        enemy.health -= 10;
     }
 
     if(successfulAttack({attacker: enemy, attacked: player})) {
-        player.health -= 20;
+        player.health -= 10;
     }
 
     return 0;

@@ -68,6 +68,8 @@ io.on("connection", (client) => {
   }
 
   function keyDown(key) {
+    const roomId = clientToRoom[client.id];
+    const state = roomToState[roomId];
     switch (key) {
       case "a":
         state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
@@ -87,13 +89,16 @@ io.on("connection", (client) => {
 
           setTimeout(() => {
             state.players[client.role - 1].attacking = false;
-          }, (1000 / FRAME_RATE) * 3);
+          }, (1000 / FRAME_RATE) * 2);
         }
         break;
     }
   }
 
   function keyUp(key) {
+    const roomId = clientToRoom[client.id];
+    const state = roomToState[roomId];
+
     switch (key) {
       case "a":
         state.players[client.role - 1].velocity.x = 0;
