@@ -21,6 +21,7 @@ import SportsMmaIcon from "@mui/icons-material/SportsMma";
 import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
 import styles from "./App.module.css";
+import MainPage from "./components/MainPage/MainPage";
 
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Account", "Logout"];
@@ -93,7 +94,7 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <Game />
+      <MainPage/>
       <Outlet />
     </div>
   );
