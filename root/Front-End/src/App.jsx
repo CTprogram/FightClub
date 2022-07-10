@@ -94,7 +94,6 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <MainPage/>
       <Outlet />
     </div>
   );
