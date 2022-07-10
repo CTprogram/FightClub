@@ -32,7 +32,7 @@ io.on("connection", (client) => {
   client.on("createdRoom", createRoom);
   client.on("joinRoom", joinRoom);
 
-  function createRoom () {
+  function createRoom() {
     const roomId = makeid(10);
     const state = initNewGameState();
     client.join(roomId);
@@ -42,28 +42,25 @@ io.on("connection", (client) => {
     client.emit("init", roomId);
   }
 
-  function joinRoom (roomId) {
-    const rooms  = io.sockets.adapter.rooms;
-    const room = rooms[roomId];
+  function joinRoom(roomId) {
+    const room = io.sockets.adapter.rooms.get(roomId);
 
-    if(room) {
-      const users = room.sockets;
-      const numOfUsers = users.length;
-
-      if(numOfUsers === 1) { 
-        //Join room 
+    if (room) {
+      const numOfUsers = room.size;
+      if (numOfUsers === 1) {
+        //Join room
         client.join(roomId);
         client.role = 2;
         clientToRoom[client.id] = roomId;
-        const roomState = state[roomId];
-        if(roomState) startGame(roomState, roomId);
+        const roomState = roomToState[roomId];
+        if (roomState) startGame(roomState, roomId);
       } else if (numOfUsers > 1) {
-        client.emit('gameInProgress', roomId);
+        client.emit("gameInProgress", roomId);
       } else {
-        client.emit('invalidRoom', roomId);
+        client.emit("invalidRoom", roomId);
       }
     } else {
-      client.emit('invalidRoom', roomId);
+      client.emit("invalidRoom", roomId);
     }
   }
 
@@ -78,13 +75,13 @@ io.on("connection", (client) => {
         state.players[client.role - 1].velocity.x = CHARACTER_HORIZONTAL_SPEED;
         break;
       case "w":
-        if(state.players[client.role - 1].onGround){
+        if (state.players[client.role - 1].onGround) {
           state.players[client.role - 1].velocity.y = CHARACTER_JUMP_OFFSET;
           state.players[client.role - 1].onGround = false;
         }
         break;
       case "s":
-        if(!state.players[client.role - 1].attacking) {
+        if (!state.players[client.role - 1].attacking) {
           state.players[client.role - 1].attacking = true;
 
           setTimeout(() => {
@@ -116,19 +113,19 @@ function startGame(state, roomId) {
 
     if (!decision) {
       console.log(JSON.stringify(state));
-      io.sockets.in(roomId).emit('gameSnapShot', JSON.stringify(state));
+      io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
       clearInterval(interval);
-      io.sockets.in(roomId).emit('gameEnded', decision);
+      io.sockets.in(roomId).emit("gameEnded", decision);
     }
   }, 1000 / FRAME_RATE);
 
   const timer = setInterval(() => {
-    if(state.timeLeft > 0) {
+    if (state.timeLeft > 0) {
       state.timeLeft--;
     } else {
       clearInterval(timer);
-      //clearInterval(interval);
+      clearInterval(interval);
     }
   }, 1000);
 }
@@ -146,9 +143,7 @@ app.use(
 );
 
 //connect to mongoDB
-mongoose.connect("mongodb://localhost:27017/", () =>
-  console.log("Connected to db!")
-);
+mongoose.connect("mongodb://localhost:27017/", () => console.log("Connected to db!"));
 
 //Middleware
 app.use("/api/user/", userRoutes);

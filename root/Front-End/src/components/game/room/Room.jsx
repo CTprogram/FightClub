@@ -4,18 +4,29 @@ import Card from "../../UI/Card";
 import { SocketContext } from "../../../utils/socket";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
-const Room = (props) => {
+import React from "react";
+import ReactDOM from "react-dom";
+
+const Backdrop = (props) => {
+  return <div className={styles.backdrop} onClick={props.onCancelPlay} />;
+};
+
+const RoomOverlay = (props) => {
+  let navigate = useNavigate();
   const socket = useContext(SocketContext);
   const [code, setCode] = useState("asdasds");
   const createGame = () => {
-    socket.emit("createGame");
+    socket.emit("createdRoom");
+    navigate("/game");
   };
 
   const joinRoom = () => {
     socket.emit("joinRoom", code);
+    navigate("/game");
   };
   const joinRandom = () => {
     socket.emit("joinRandom");
+    navigate("/game");
   };
   const handleCodeChange = (e) => {
     setCode(e.target.value);
@@ -54,6 +65,15 @@ const Room = (props) => {
         </div>
       </Card>
     </Card>
+  );
+};
+
+const Room = (props) => {
+  return (
+    <React.Fragment>
+      {ReactDOM.createPortal(<Backdrop onConfirm={props.onCancelPlay} />, document.getElementById("backdrop-root"))}
+      {ReactDOM.createPortal(<RoomOverlay />, document.getElementById("overlay-root"))}
+    </React.Fragment>
   );
 };
 
