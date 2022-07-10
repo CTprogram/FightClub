@@ -12,9 +12,11 @@
 
 .welcomeTitle {
   font-size: 4em;
+  text-align: center;
 }
 .description {
   font-size: 2em;
+  text-align: center;
 }
 
 .btnItem {

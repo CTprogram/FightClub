@@ -78,3 +78,9 @@
   background-color: black;
   color: white;
 }
+
+.link{
+  display: flex;
+  justify-content: space-evenly;
+  text-decoration: none;
+}
