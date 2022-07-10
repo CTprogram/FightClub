@@ -85,7 +85,7 @@ const SignUp = () => {
           </button>
 
           <div className={styles.optionalText}>Have an account already?</div>
-          <Link to="/login">
+          <Link to="/login" className={styles.link}>
             <button
                 className={styles.signinBtn}
               >
