@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
-import styles from "./Login.Module.css";
+import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
-import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,6 +11,9 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
+import Card from "../UI/Card";
+import { Link, Outlet } from "react-router-dom";
+
 
 const Login = () => {
 
@@ -58,9 +60,9 @@ const Login = () => {
       };
     
     return (
-     <div className={styles.CardContainer}>
-        <Card className={styles.Card}>
-          <div className={styles.formTitle}>Login</div>
+      <div className={styles.container}>
+        <Card className={styles.card}>
+        <div className={styles.formTitle}>Login</div>
           <form
             id="login-form"
             className={styles.formContainer}
@@ -72,7 +74,7 @@ const Login = () => {
               autoComplete="username"
               name="username"
               {...register2("username", { maxLength: 30 })}
-              className={styles.formElement}
+              className={styles.formInput}
               placeholder="Enter a username"
               required
             />
@@ -82,22 +84,45 @@ const Login = () => {
               autoComplete="current-password"
               name="password"
               {...register2("password")}
-              className={styles.formElement}
+            className={styles.formInput}
               placeholder="Enter a password"
               required
             />
-
+          
             <button
               id="signin"
-              name="action"
+              name="signin"
               className={styles.signBtn}
-              variant="contained"
-              size="large"
             >
               Sign in
             </button>
+          
+          <div className={styles.optionalText}>Or login with</div>
+
+          <div className={styles.btnContainer}>
+           <button id="authSignin"
+              name="auth" className={styles.authBtn}>
+                Google
+            </button>
+            <button id="authSignin"
+              name="auth" className={styles.authBtn}>
+                Facebook
+            </button>
+
+          </div>
+
+            <div className={styles.optionalText}>Don't have an account yet?</div>
+            <Link to="/signup">
+              <button
+                className={styles.signUpBtn}
+              >
+              Signup
+              </button>
+            </Link>
+
           </form>
         </Card>
+          
     </div>
     );
   };
