@@ -32,7 +32,6 @@
   
 .formElementTitle{
     font-size:2em;
-  
     text-align: left;
     padding-left: 0px;
   }
@@ -95,6 +94,7 @@
 .link{
   display: flex;
   justify-content: space-evenly;
+  text-decoration: none;
 }
 .signUpBtn {
   font-size: 2em;

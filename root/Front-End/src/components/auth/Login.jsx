@@ -68,7 +68,7 @@ const Login = () => {
             className={styles.formContainer}
             onSubmit={handleSubmit2(onSubmitLogin)}
           >
-            <Typography className={styles.formElementTitle}>Username</Typography>
+            <div className={styles.formElementTitle}>Username </div>
             <input
               type="text"
               autoComplete="username"
@@ -78,7 +78,7 @@ const Login = () => {
               placeholder="Enter a username"
               required
             />
-            <Typography className={styles.formElementTitle}> Password</Typography>
+            <div className={styles.formElementTitle}>Password </div>
             <input
               type="password"
               autoComplete="current-password"
@@ -112,7 +112,7 @@ const Login = () => {
           </div>
 
             <div className={styles.optionalText}>Don't have an account yet?</div>
-            <Link to="/signup">
+            <Link to="/signup" className={styles.link}>
               <button
                 className={styles.signUpBtn}
               >
