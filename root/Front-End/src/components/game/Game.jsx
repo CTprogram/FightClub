@@ -13,22 +13,27 @@ const Game = () => {
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [load, setLoad] = useState(false);
   const [gameCode, setGameCode] = useState("");
-  const handleGameSnapShot = useCallback((state) => {
-    state = JSON.parse(state);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    handleGameState(state, canvas, ctx);
-    setCurrentPlayerHealth(state.players[0].health / 100);
-    setCurrentEnemyHealth(state.players[1].health / 100);
-    setCanvasWidth(canvas.width);
-  }, []);
+  const handleGameSnapShot = useCallback(
+    (state) => {
+      if (!load) setLoad(true);
+      state = JSON.parse(state);
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      handleGameState(state, canvas, ctx);
+      setCurrentPlayerHealth(state.players[0].health / 100);
+      setCurrentEnemyHealth(state.players[1].health / 100);
+      setCanvasWidth(canvas.width);
+    },
+    [load]
+  );
 
   const handleInit = useCallback((gameCode) => {
     setGameCode(gameCode);
   }, []);
 
   const handleGameInProgress = useCallback((roomId) => {
-    setLoad(true);
+    console.log("asdasdasd");
+    // setLoad(true);
   }, []);
 
   useEffect(() => {
@@ -40,12 +45,12 @@ const Game = () => {
 
     socket.on("gameSnapShot", handleGameSnapShot);
     socket.on("init", handleInit);
-    socket.on("gameInProgess", handleGameInProgress);
+    socket.on("gameInProgress", handleGameInProgress);
 
     return () => {
       socket.off("gameSnapShot", handleGameSnapShot);
       socket.off("init", handleInit);
-      socket.off("gameInProgess", handleGameInProgress);
+      socket.off("gameInProgress", handleGameInProgress);
     };
   }, [socket, gameCode, load]);
 

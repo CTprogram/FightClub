@@ -1,82 +1,80 @@
-.container{
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 300px;
   padding-left: 800px;
 }
 
-.card{
-    background-color: white;
-    border: 2px solid black;
-    padding-left: 300px;
-    padding: 15px 30px 200px 30px;
-    width: 35em;
-    height: 25em;
-  }
-  
-.UserMenuContainer{
-    display: flex;
-    flex-direction: row;
-  }
-  
-.Username{
-    padding-top: 10px;
-  }
-  
-.formElement{
-    margin-bottom: 10px;
-    font-size: 25px;
-  }
-  
-.formElementTitle{
-    font-size:2em;
-    text-align: left;
-    padding-left: 0px;
+.card {
+  background-color: white;
+  border: 2px solid black;
+  padding-left: 300px;
+  padding: 15px 30px 200px 30px;
+  width: 35em;
+  height: 25em;
 }
-  
-.formTitle{
-    font-size: 3em;
-    font-family: sans-serif;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-.formContainer{
-    display: flex;
-    flex-direction: column;
-  }
-  
+
+.UserMenuContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.Username {
+  padding-top: 10px;
+}
+
+.formElement {
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+.formElementTitle {
+  font-size: 2em;
+  text-align: left;
+  padding-left: 0px;
+}
+
+.formTitle {
+  font-size: 3em;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .signBtn {
-    font-size: 2em;
-    margin-top: 20px;
-    background-color: white;
-    padding: 10px 10px 10px 10px;
-    border: 2px solid black;
-    color: black;
+  font-size: 2em;
+  margin-top: 20px;
+  background-color: white;
+  padding: 10px 10px 10px 10px;
+  border: 2px solid black;
+  color: black;
+}
+.signBtn:hover {
+  background-color: black;
+  color: white;
+}
 
-  }
-.signBtn:hover{
-    background-color: black;
-    color: white;
-  }
-
-.optionalText{
-    padding-top: 10px;
-    text-align: center;
-  }
+.optionalText {
+  padding-top: 10px;
+  text-align: center;
+}
 
 .signinBtn {
-    font-size: 2em;
-    margin-top: 20px;
-    background-color: white;
-    padding: 10px 10px 10px 10px;
-    border: 2px solid black;
-    color: black;
-    margin-left: 20px;
-    width:auto;
-  }
-.signinBtn:hover{
-    background-color: black;
-    color: white;
-  }
+  font-size: 2em;
+  margin-top: 20px;
+  background-color: white;
+  padding: 10px 10px 10px 10px;
+  border: 2px solid black;
+  color: black;
+  margin-left: 20px;
+  width: auto;
+}
+.signinBtn:hover {
+  background-color: black;
+  color: white;
+}

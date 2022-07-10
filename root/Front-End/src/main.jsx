@@ -8,6 +8,7 @@ import Login from "./components/auth/Login";
 import SignUp from "./components/auth/Signup";
 import MainPage from "./components/MainPage/MainPage";
 import Game from "./components/game/Game";
+import HomePage from "./components/HomePage/HomePage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="game" element={<Game />} />
+            <Route path="home" element={<HomePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

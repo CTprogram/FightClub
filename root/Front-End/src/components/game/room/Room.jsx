@@ -8,7 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 const Backdrop = (props) => {
-  return <div className={styles.backdrop} onClick={props.onCancelPlay} />;
+  return <div className={styles.backdrop} onClick={props.cancelPlayHandler} />;
 };
 
 const RoomOverlay = (props) => {
@@ -71,7 +71,7 @@ const RoomOverlay = (props) => {
 const Room = (props) => {
   return (
     <React.Fragment>
-      {ReactDOM.createPortal(<Backdrop onConfirm={props.onCancelPlay} />, document.getElementById("backdrop-root"))}
+      {ReactDOM.createPortal(<Backdrop cancelPlayHandler={props.cancelPlayHandler} />, document.getElementById("backdrop-root"))}
       {ReactDOM.createPortal(<RoomOverlay />, document.getElementById("overlay-root"))}
     </React.Fragment>
   );

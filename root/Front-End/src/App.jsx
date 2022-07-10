@@ -22,6 +22,7 @@ import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
 import styles from "./App.module.css";
 import Room from "./components/game/room/Room";
+import Navbar from "./components/Navbar/Navbar";
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Account", "Logout"];
 
@@ -29,70 +30,9 @@ function App() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, setUser] = React.useState({});
 
-  const openUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const closeUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <div className={styles.App}>
-      <AppBar className={styles.Menu}>
-        <Toolbar disableGutters className={styles.Menu}>
-          <div className={styles.LogoContainer}>
-            {/* <SportsMmaIcon className={styles.FightLogo} /> */}
-            <div className={styles.LogoTitle}>Fight Club</div>
-          </div>
-
-          {user && user.username && (
-            <Box className={styles.Menu}>
-              {menuItems.map((item) => (
-                <Button key={item} sx={{ my: 2, color: "white", display: "block" }}>
-                  {item}
-                </Button>
-              ))}
-            </Box>
-          )}
-
-          {user && user.username && (
-            <Box className={styles.UserMenuContainer}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={openUserMenu}>
-                  <Avatar alt="" src="" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                className={styles.userMenu}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={closeUserMenu}
-              >
-                {profileItems.map((item) => (
-                  <MenuItem key={item} onClick={closeUserMenu}>
-                    <Typography textAlign="center">{item}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-              <Typography variant="h6" className={styles.Username}>
-                {user.username}
-              </Typography>
-            </Box>
-          )}
-        </Toolbar>
-      </AppBar>
+    <div>
+      <Navbar user={user} anchorElUser={anchorElUser} />
       <Outlet />
     </div>
   );
