@@ -62,7 +62,7 @@ const Login = () => {
     return (
       <div className={styles.container}>
         <Card className={styles.card}>
-        <div className={styles.formTitle}>Login</div>
+        <div className={styles.formTitle}>Log In</div>
           <form
             id="login-form"
             className={styles.formContainer}
@@ -94,7 +94,7 @@ const Login = () => {
               name="signin"
               className={styles.signBtn}
             >
-              Sign in
+              Log In
             </button>
           
           <div className={styles.optionalText}>Or login with</div>
@@ -116,7 +116,7 @@ const Login = () => {
               <button
                 className={styles.signUpBtn}
               >
-              Signup
+              Sign Up
               </button>
             </Link>
 
