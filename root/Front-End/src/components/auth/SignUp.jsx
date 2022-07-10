@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
-import styles from "./SignUp.Module.css";
+import styles from "./SignUp.module.css";
 import { useForm } from "react-hook-form";
-import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -11,6 +10,8 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
+import Card from "../UI/Card";
+import { Link, Outlet } from "react-router-dom";
 
 const SignUp = () => {
   const {
@@ -66,22 +67,31 @@ const SignUp = () => {
   };
 
   return (
-    <div className={styles.CardContainer}>
-      <Card className={styles.Card}>
-        <div className={styles.formTitle}>Signup</div>
+    <div className={styles.container}>
+      <Card className={styles.card}>
+        <div className={styles.formTitle}>Sign Up</div>
         <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
-          <Typography className={styles.formElementTitle}>Username</Typography>
+          <div  className={styles.formElementTitle}>Username</div>
           <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
           {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
-          <Typography className={styles.formElementTitle}> Password</Typography>
+          <div  className={styles.formElementTitle}>Password</div>
           <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
 
-          <Typography className={styles.formElementTitle}> Email</Typography>
+          <div  className={styles.formElementTitle}>Email</div>
           <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
 
-          <button id="signup" name="action" className={styles.signBtn} variant="contained" size="large">
-            Sign up
+          <button id="signup" name="action" className={styles.signBtn}>
+            Sign Up
           </button>
+
+          <div className={styles.optionalText}>Have an account already?</div>
+          <Link to="/login">
+            <button
+                className={styles.signinBtn}
+              >
+                Log In
+              </button>
+          </Link>
         </form>
       </Card>
     </div>
