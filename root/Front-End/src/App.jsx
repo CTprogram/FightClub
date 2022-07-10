@@ -93,7 +93,6 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <Room />
       <Outlet />
     </div>
   );

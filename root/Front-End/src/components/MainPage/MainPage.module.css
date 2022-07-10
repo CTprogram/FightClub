@@ -1,0 +1,36 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 120px;
+}
+
+.btnContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.welcomeTitle{
+    font-size: 4em;
+}
+.description{
+    font-size: 2em;
+}
+
+.btnItem{
+    padding-right: 35px;
+}
+
+.signBtn {
+    font-size: 2em;
+    margin-top: 20px;
+    background-color: white;
+    padding: 15px 10px 15px 10px;
+    border: 2px solid black;
+    color: black;
+  }
+  .signBtn:hover{
+    background-color: black;
+    color: white;
+  }
