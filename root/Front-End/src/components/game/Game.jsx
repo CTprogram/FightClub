@@ -12,11 +12,8 @@ const Game = () => {
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState(1);
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [load, setLoad] = useState(false);
-
+  const [gameCode, setGameCode] = useState("");
   const handleGameSnapShot = useCallback((state) => {
-    if (!load) {
-      setLoad(true);
-    }
     state = JSON.parse(state);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -24,6 +21,14 @@ const Game = () => {
     setCurrentPlayerHealth(state.players[0].health / 100);
     setCurrentEnemyHealth(state.players[1].health / 100);
     setCanvasWidth(canvas.width);
+  }, []);
+
+  const handleInit = useCallback((gameCode) => {
+    setGameCode(gameCode);
+  }, []);
+
+  const handleGameInProgress = useCallback((roomId) => {
+    setLoad(true);
   }, []);
 
   useEffect(() => {
@@ -34,11 +39,15 @@ const Game = () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     socket.on("gameSnapShot", handleGameSnapShot);
+    socket.on("init", handleInit);
+    socket.on("gameInProgess", handleGameInProgress);
 
     return () => {
       socket.off("gameSnapShot", handleGameSnapShot);
+      socket.off("init", handleInit);
+      socket.off("gameInProgess", handleGameInProgress);
     };
-  }, [socket]);
+  }, [socket, gameCode, load]);
 
   //socket effects
   // useEffect(() => {
@@ -55,7 +64,7 @@ const Game = () => {
     socket.emit("keyUp", e.key);
   };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={canvasRef.current && { width: canvasRef.current.width }}>
       <canvas className={styles.myCanvas} tabIndex={0} autoFocus ref={canvasRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
       {load && (
         <div className={styles.overlay}>
@@ -65,7 +74,7 @@ const Game = () => {
         </div>
       )}
 
-      {/* <button className={styles.btn}>HELLO</button> */}
+      <div>{gameCode}</div>
     </div>
   );
 };

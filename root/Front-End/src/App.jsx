@@ -21,8 +21,7 @@ import SportsMmaIcon from "@mui/icons-material/SportsMma";
 import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
 import styles from "./App.module.css";
-import MainPage from "./components/MainPage/MainPage";
-
+import Room from "./components/game/room/Room";
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Account", "Logout"];
 
