@@ -69,19 +69,19 @@ const SignUp = () => {
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
-        <div className={styles.formTitle}>Signup</div>
+        <div className={styles.formTitle}>Sign Up</div>
         <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
-          <Typography className={styles.formElementTitle}>Username</Typography>
+          <div  className={styles.formElementTitle}>Username</div>
           <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
           {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
-          <Typography className={styles.formElementTitle}> Password</Typography>
+          <div  className={styles.formElementTitle}>Password</div>
           <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
 
-          <Typography className={styles.formElementTitle}> Email</Typography>
+          <div  className={styles.formElementTitle}>Email</div>
           <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
 
           <button id="signup" name="action" className={styles.signBtn}>
-            Sign up
+            Sign Up
           </button>
 
           <div className={styles.optionalText}>Have an account already?</div>
@@ -89,7 +89,7 @@ const SignUp = () => {
             <button
                 className={styles.signinBtn}
               >
-                Sign in
+                Log In
               </button>
           </Link>
         </form>
