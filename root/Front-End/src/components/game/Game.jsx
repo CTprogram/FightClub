@@ -4,6 +4,7 @@ import { handleGameState } from "../../utils/gameUtils";
 import { SocketContext } from "../../utils/socket";
 import styles from "./Game.module.css";
 import HealthBar from "./gameUI/HealthBar";
+import Waiting from "./gameUI/waiting-animation/Waiting";
 
 const Game = () => {
   const canvasRef = useRef(null);
@@ -12,10 +13,12 @@ const Game = () => {
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState(1);
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [load, setLoad] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [gameCode, setGameCode] = useState("");
   const handleGameSnapShot = useCallback(
     (state) => {
       if (!load) setLoad(true);
+      if(loading) setTimeout(() => {setLoading(false)}, 2000);
       state = JSON.parse(state);
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -78,7 +81,10 @@ const Game = () => {
           <HealthBar width={canvasWidth / 3} healthRatio={currentEnemyHealth} playerNum={2} />
         </div>
       )}
-
+      {loading && (
+        <div className={styles.waiting}>
+         <Waiting loading={!load} />
+        </div>)}
       <div>{gameCode}</div>
     </div>
   );
