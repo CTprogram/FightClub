@@ -1,0 +1,32 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    color:black;
+    background-color: white;
+    width: 400px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: rgba(240, 46, 170, 0.4) 0px 5px, rgba(240, 46, 170, 0.3) 0px 10px, rgba(240, 46, 170, 0.2) 0px 15px, rgba(240, 46, 170, 0.1) 0px 20px, rgba(240, 46, 170, 0.05) 0px 25px;
+}
+
+.text {
+    flex: 1;
+    background-color: rgb(233, 230, 230);
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 15px;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
+
+.icon:hover{
+    cursor: pointer;
+}
+
+.snackbar{
+    position: fixed !important;
+}

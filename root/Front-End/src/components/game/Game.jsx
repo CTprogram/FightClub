@@ -72,20 +72,21 @@ const Game = () => {
     socket.emit("keyUp", e.key);
   };
   return (
-    <div className={styles.container} style={canvasRef.current && { width: canvasRef.current.width }}>
-      <canvas className={styles.myCanvas} tabIndex={0} autoFocus ref={canvasRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
-      {load && (
-        <div className={styles.overlay}>
-          <HealthBar width={canvasWidth / 3} healthRatio={currentPlayerHealth} playerNum={1} />
-          <div>adasdasdasd</div>
-          <HealthBar width={canvasWidth / 3} healthRatio={currentEnemyHealth} playerNum={2} />
-        </div>
-      )}
-      {loading && (
-        <div className={styles.waiting}>
-         <Waiting loading={!load} />
-        </div>)}
-      <div>{gameCode}</div>
+    <div className={styles.wrapper}>
+      <div className={styles.gameScreen} style={canvasRef.current && { width: canvasRef.current.width }}>
+        <canvas className={styles.myCanvas} tabIndex={0} autoFocus ref={canvasRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
+        {load && (
+          <div className={styles.overlay}>
+            <HealthBar width={canvasWidth / 3} healthRatio={currentPlayerHealth} playerNum={1} />
+            <div>adasdasdasd</div>
+            <HealthBar width={canvasWidth / 3} healthRatio={currentEnemyHealth} playerNum={2} />
+          </div>
+        )}
+        {loading && (
+          <div className={styles.waiting}>
+            <Waiting loading={!load} code={gameCode}/>
+          </div>)}
+      </div>
     </div>
   );
 };

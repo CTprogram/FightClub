@@ -3,8 +3,9 @@ import styles from "./Waiting.module.css";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CopyDialog from '../copy-gameCode/CopyDialog';
 
-function Waiting({loading}) {
+function Waiting({loading, code}) {
 
     const [text, setText] = useState('Waiting for opponent to join...');
 
@@ -14,6 +15,7 @@ function Waiting({loading}) {
     
   return (
     <div className={`${styles.wrapper} ${!loading && styles.fadeout}`}>
+        {loading && <CopyDialog text={code}/>}
         <div className={styles.text}>
             {text}
         </div>
