@@ -3,6 +3,9 @@ const express = require("express");
 const cookie = require("cookie");
 const router = express.Router();
 const user = require("../db/Models/UserSchema");
+const sendEmail = require("../Email/EmailMailer");
+const ResetPassword = require("../db/Models/ResetPasswordSchema");
+const crypto = require("crypto");
 
 router.post("/register/", function (req, res, next) {
   const requiredSchema = ["username", "password", "email"];
@@ -70,8 +73,6 @@ router.post("/register/", function (req, res, next) {
                 .json({ username: req.body.username, email: req.body.email });
             })
             .catch((err) => {
-              console.log(err);
-              console.log("error in here");
               return res.status(500).json({ error: err });
             });
         });
@@ -119,6 +120,46 @@ router.post("/login/", function (req, res, next) {
       );
       return res.status(200).json({ username: username });
     });
+  });
+});
+
+router.put("/forgotPassword/", function (req, res, next) {
+  if (!req.body.email) {
+    res.status(400).json({
+      error: "Invalid Email",
+    });
+  }
+  user.findOne({ email: req.body.email }, function (err, userDoc) {
+    if (err) return res.status(500).json({ error: err });
+    if (!userDoc) return res.status(401).json({ err: "Invalid email" });
+
+    const code = crypto.randomBytes(8).toString("hex");
+
+    const resetPwdItem = new ResetPassword({
+      email: req.body.email,
+      resetCode: code,
+    });
+
+    resetPwdItem
+      .save()
+      .then(() => {
+        let emailOptions = {
+          from: "fightclubCSCC09@hotmail.com",
+          to: req.body.email,
+          subject: "Fight Club password recovery",
+          text:
+            "Your follow password recovery code is " +
+            code +
+            ". Code Expires in 15 minutes",
+        };
+
+        sendEmail(emailOptions);
+
+        return res.redirect(200, "/resetPassword");
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err });
+      });
   });
 });
 

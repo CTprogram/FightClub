@@ -39,7 +39,6 @@ const Login = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
           mode: 'cors',
           body: JSON.stringify(object),
         });
@@ -110,6 +109,7 @@ const Login = () => {
             </button>
 
           </div>
+            <Link to="/forgetPassword" className={styles.forgetPasswordlink}>Forgot Password?</Link>
 
             <div className={styles.optionalText}>Don't have an account yet?</div>
             <Link to="/signup" className={styles.link}>
