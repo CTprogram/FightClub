@@ -155,7 +155,7 @@ router.put("/forgotPassword/", function (req, res, next) {
 
         sendEmail(emailOptions);
 
-        return res.redirect(200, "/resetPassword");
+        return res.status(200);
       })
       .catch((err) => {
         return res.status(500).json({ error: err });

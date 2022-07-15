@@ -8,15 +8,19 @@ import React, {
 import styles from "./ForgotPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const onSuccess = () => {
+    navigate("/resetPassword");
+  };
   const onSubmitForgotPassword = async (data) => {
     var formData = new FormData();
     formData.append("email", data.email);
@@ -26,6 +30,7 @@ const ForgotPassword = () => {
     formData.forEach(function (value, key) {
       object[key] = value;
     });
+    
 
     const response = await fetch("http://localhost:3001/api/user/forgotPassword/", {
       method: "Put",
@@ -38,6 +43,7 @@ const ForgotPassword = () => {
 
     if (response.status === 200) {
       //on successful login do something
+      onSuccess();
       console.log("successfully sent email to reset");
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {

@@ -8,7 +8,7 @@ import React, {
 import styles from "./ResetPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const {
