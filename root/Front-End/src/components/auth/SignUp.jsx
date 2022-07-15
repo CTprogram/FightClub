@@ -40,7 +40,6 @@ const SignUp = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
       mode: "cors",
       body: JSON.stringify(object),
     });

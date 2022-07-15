@@ -11,7 +11,11 @@ const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
-const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET } = require("./utils/constants");
+const {
+  FRAME_RATE,
+  CHARACTER_HORIZONTAL_SPEED,
+  CHARACTER_JUMP_OFFSET,
+} = require("./utils/constants");
 const { makeid } = require("./utils/utilities");
 const port = 3001;
 
@@ -143,7 +147,9 @@ app.use(
 );
 
 //connect to mongoDB
-mongoose.connect("mongodb://localhost:27017/", () => console.log("Connected to db!"));
+mongoose.connect("mongodb://localhost:27017/", () =>
+  console.log("Connected to db!")
+);
 
 //Middleware
 app.use("/api/user/", userRoutes);

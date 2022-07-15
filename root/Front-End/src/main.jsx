@@ -9,6 +9,8 @@ import SignUp from "./components/auth/Signup";
 import MainPage from "./components/MainPage/MainPage";
 import Game from "./components/game/Game";
 import HomePage from "./components/HomePage/HomePage";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,9 +23,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="signup" element={<SignUp />} />
             <Route path="game" element={<Game />} />
             <Route path="home" element={<HomePage />} />
+            <Route path="forgetPassword" element={<ForgotPassword />} />
+            <Route path="resetPassword" element={<ResetPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
     </SocketContext.Provider>
   </React.StrictMode>
 );
+
