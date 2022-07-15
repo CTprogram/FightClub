@@ -11,9 +11,15 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  const onSuccess = () => {
+    navigate("/login");
+  };
+
   const {
     register,
     handleSubmit,
@@ -48,6 +54,7 @@ const SignUp = () => {
     console.log(responseData);
 
     if (response.status === 201) {
+      onSuccess();
       document.getElementById("register-form").reset();
     } else if (response.status === 409) {
       if (responseData.error.includes("username")) {
