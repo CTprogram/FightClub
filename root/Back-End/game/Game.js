@@ -1,4 +1,4 @@
-const { GAME_SCREEN_HEIGHT, GRAVITY } = require("../utils/constants");
+const { GAME_SCREEN_HEIGHT, GRAVITY, GROUND_OFFSET, ENEMY_GROUND_OFFSET, PLAYER_GROUND_OFFSET } = require("../utils/constants");
 
 function initNewGameState() {
     return {
@@ -15,7 +15,7 @@ function initNewGameState() {
                 color: 'red',
                 health: 100, 
                 width: 50,
-                height: 150,
+                height: 170,
                 onGround: false,
                 attacking: false,
                 attackBox: {
@@ -23,7 +23,7 @@ function initNewGameState() {
                         x: 0,
                         y: 0
                     },
-                    width: 100,
+                    width: 225,
                     height: 50,
                     offset: 0
                 }
@@ -40,7 +40,7 @@ function initNewGameState() {
                 color: 'green',
                 health: 100,
                 width: 50,
-                height: 150,
+                height: 200,
                 onGround: false,
                 attacking: false,
                 attackBox: {
@@ -48,13 +48,13 @@ function initNewGameState() {
                         x: 0,
                         y: 0
                     },
-                    width: 100,
+                    width: 250,
                     height: 50,
-                    offset: 50
+                    offset: 250
                 }
             }
         ],
-        timeLeft: 60
+        timeLeft: 600
     }
 }
 
@@ -74,14 +74,14 @@ function gameLoop(state) {
     enemy.attackBox.position.x = enemy.position.x - enemy.attackBox.offset;
     enemy.attackBox.position.y = enemy.position.y;
 
-    if(player.position.y + player.height + player.velocity.y >= GAME_SCREEN_HEIGHT) {
+    if(player.position.y + player.height + player.velocity.y + PLAYER_GROUND_OFFSET >= GAME_SCREEN_HEIGHT) {
         player.onGround = true;
         player.velocity.y = 0;
     } else {
         player.velocity.y += GRAVITY;
     }
 
-    if(enemy.position.y + enemy.height + enemy.velocity.y >= GAME_SCREEN_HEIGHT) {
+    if(enemy.position.y + enemy.height + enemy.velocity.y + ENEMY_GROUND_OFFSET >= GAME_SCREEN_HEIGHT) {
         enemy.onGround = true;
         enemy.velocity.y = 0;
     } else {
@@ -89,11 +89,11 @@ function gameLoop(state) {
     }
 
     if(successfulAttack({attacker: player, attacked: enemy})) {
-        enemy.health -= 10;
+        enemy.health -= 10/ 14.5;
     }
 
     if(successfulAttack({attacker: enemy, attacked: player})) {
-        player.health -= 10;
+        player.health -= 10 / 8.5;
     }
 
     return 0;

@@ -11,11 +11,7 @@ const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
-const {
-  FRAME_RATE,
-  CHARACTER_HORIZONTAL_SPEED,
-  CHARACTER_JUMP_OFFSET,
-} = require("./utils/constants");
+const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET, PLAYER_ATTACK_FRAMES, ENEMY_ATTACK_FRAMES } = require("./utils/constants");
 const { makeid } = require("./utils/utilities");
 const port = 3001;
 
@@ -24,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-//Socket Maps
+//Socket Mapsd
 const clientToRoom = {};
 const roomToState = {};
 
@@ -85,12 +81,12 @@ io.on("connection", (client) => {
         }
         break;
       case "s":
+        const settings = client.role === 1 ? {frames: PLAYER_ATTACK_FRAMES, delay: 1000}: {frames: ENEMY_ATTACK_FRAMES, delay: 0}; 
         if (!state.players[client.role - 1].attacking) {
           state.players[client.role - 1].attacking = true;
-
           setTimeout(() => {
             state.players[client.role - 1].attacking = false;
-          }, (1000 / FRAME_RATE) * 2);
+          }, (1000 / FRAME_RATE) * settings.frames);
         }
         break;
     }
