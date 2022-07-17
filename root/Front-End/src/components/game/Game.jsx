@@ -1,12 +1,22 @@
 import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { io } from "socket.io-client";
-import { handleGameState, Sprite, Fighter } from "../../utils/gameUtils";
+import { myContext } from "../../utils/context";
+import { handleGameState } from "../../utils/gameUtils";
+import { Sprite, Fighter } from "../../utils/gameUtils";
 import { SocketContext } from "../../utils/socket";
 import styles from "./Game.module.css";
 import HealthBar from "./gameUI/HealthBar";
 import Waiting from "./gameUI/waiting-animation/Waiting";
 import image from "../../assets/kenji/Idle.png";
 const Game = () => {
+
+  const user = useContext(myContext);
+
+  if(!(user && user.username)) {
+    return <Navigate to="/"/>
+  }
+
   const canvasRef = useRef(null);
   const socket = useContext(SocketContext);
   const [currentPlayerHealth, setCurrentPlayerHealth] = useState(1);
@@ -75,12 +85,6 @@ const Game = () => {
     };
   }, [socket, gameCode, load]);
 
-  //socket effects
-  // useEffect(() => {
-  //   socket.on("hello", (data) => {
-  //     console.log(data);
-  //   });
-  // }, [socket]);
   const handleKeyDown = (e) => {
     console.log("a");
     socket.emit("keyDown", e.key);
@@ -89,6 +93,7 @@ const Game = () => {
     console.log("b");
     socket.emit("keyUp", e.key);
   };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.gameScreen} style={canvasRef.current && { width: canvasRef.current.width }}>

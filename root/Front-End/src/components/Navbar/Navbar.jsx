@@ -77,7 +77,7 @@ const Navbar = (props) => {
                 ))}
               </Menu>
               <Typography variant="h6" className={styles.Username}>
-                {user.username}
+                {props.user.username}
               </Typography>
             </Box>
           )}

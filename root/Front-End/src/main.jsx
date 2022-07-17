@@ -11,24 +11,14 @@ import Game from "./components/game/Game";
 import HomePage from "./components/HomePage/HomePage";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import ResetPassword from "./components/auth/ResetPassword";
+import ProtectedRoute from "./components/auth/Protected";
+import Context from "./utils/context";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <SocketContext.Provider value={socket}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<MainPage />} />
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="game" element={<Game />} />
-            <Route path="home" element={<HomePage />} />
-            <Route path="forgotPassword" element={<ForgotPassword />} />
-            <Route path="resetPassword" element={<ResetPassword />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </SocketContext.Provider>
+    <Context>
+      <App/>
+    </Context>
   </React.StrictMode>
 );
 

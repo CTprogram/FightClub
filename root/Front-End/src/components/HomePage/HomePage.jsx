@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../../utils/user";
 import Room from "../game/room/Room";
 
 const HomePage = (props) => {
@@ -12,6 +14,7 @@ const HomePage = (props) => {
     console.log("cancel");
     setRoom(false);
   };
+
   return (
     <div>
       {room && <Room cancelPlayHandler={cancelPlayHandler} />}

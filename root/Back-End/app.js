@@ -3,8 +3,11 @@ const express = require("express");
 const cookie = require("cookie");
 const app = express();
 const mongoose = require("mongoose");
-const userRoutes = require("./Routes/UserRoutes");
+const session = require("express-session");
+const passport = require("passport");
 
+const userRoutes = require("./Routes/UserRoutes");
+const oAuthRoutes = require("./Routes/OAuthRoutes");
 //Middleware to parse
 const httpServer = require("http").Server(app);
 const io = require("socket.io")(httpServer, { cors: "*" });
@@ -15,12 +18,41 @@ const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET, PLAYER_AT
 const { makeid } = require("./utils/utilities");
 const port = 3001;
 
+//connect to mongoDB
+const conn = process.env.MONGODB_URI || "mongodb+srv://admin1:NNkd1Y0HB16cs97Y@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+
+mongoose.connect(
+  conn,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) console.log(err);
+    else console.log("mongdb is connected");
+  }
+);
+
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-//Socket Mapsd
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+//Middleware
+app.use("/api/user/", userRoutes);
+app.use("/auth/", oAuthRoutes);
+//Socket Maps
 const clientToRoom = {};
 const roomToState = {};
 
@@ -129,26 +161,6 @@ function startGame(state, roomId) {
     }
   }, 1000);
 }
-
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-
-//Enables session
-const session = require("express-session");
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-//connect to mongoDB
-mongoose.connect("mongodb://localhost:27017/", () =>
-  console.log("Connected to db!")
-);
-
-//Middleware
-app.use("/api/user/", userRoutes);
 
 const http = require("http");
 

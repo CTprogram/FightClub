@@ -19,9 +19,11 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "../../utils/user";
 
 const Login = () => {
   const navigate = useNavigate();
+  const {user, setUser} = useContext(UserContext);
 
   const onSuccess = () => {
     navigate("/home");
@@ -54,6 +56,7 @@ const Login = () => {
     });
     const responseData = await response.json();
     console.log(responseData);
+    setUser(responseData);
 
     if (response.status === 200) {
       //on successful login do something

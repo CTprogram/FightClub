@@ -163,4 +163,8 @@ router.put("/forgotPassword/", function (req, res, next) {
   });
 });
 
+router.get("/" , function (req, res, next) {
+  res.json({user: req.user});
+});
+
 module.exports = router;
