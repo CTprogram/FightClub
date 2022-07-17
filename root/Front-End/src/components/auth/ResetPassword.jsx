@@ -11,6 +11,17 @@ import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
+
+  const onSuccess = (responseNum) => {
+    if (responseNum === 1) {
+      navigate("/login");
+    }
+    else if (responseNum === 2) {
+      navigate("/forgotPassword");
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -20,7 +31,8 @@ const ResetPassword = () => {
   const onSubmitResetPassword = async (data) => {
     var formData = new FormData();
     formData.append("email", data.email);
-
+    formData.append("resetCode", data.resetCode);
+    formData.append("password", data.password);
     // convert formData to JSON since that is what the server looks for
     var object = {};
     formData.forEach(function (value, key) {
@@ -28,27 +40,27 @@ const ResetPassword = () => {
     });
 
     const response = await fetch(
-      "http://localhost:3001/api/user/forgotPassword",
+      "http://localhost:3001/api/user/resetPassword/",
       {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         mode: "cors",
         body: JSON.stringify(object),
       }
     );
-    const responseData = await response.json();
-    console.log(responseData);
 
     if (response.status === 200) {
       //on successful login do something
+      onSuccess(1);
       console.log("successfully sent email to reset");
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {
       //invalid password or email
-    } else if (response.status === 400) {
+    } else if (response.status === 410) {
+      onSuccess(2);
+      console.log("Reset code expired");
     }
   };
 

@@ -109,7 +109,7 @@ const Login = () => {
               Facebook
             </button>
           </div>
-          <Link to="/forgetPassword" className={styles.forgetPasswordlink}>
+          <Link to="/forgotPassword" className={styles.forgetPasswordlink}>
             Forgot Password?
           </Link>
 

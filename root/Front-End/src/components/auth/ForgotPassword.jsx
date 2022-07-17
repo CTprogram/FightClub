@@ -21,6 +21,7 @@ const ForgotPassword = () => {
   const onSuccess = () => {
     navigate("/resetPassword");
   };
+
   const onSubmitForgotPassword = async (data) => {
     var formData = new FormData();
     formData.append("email", data.email);
@@ -41,6 +42,7 @@ const ForgotPassword = () => {
       body: JSON.stringify(object),
     });
 
+    console.log(response.status);
     if (response.status === 200) {
       //on successful login do something
       onSuccess();
