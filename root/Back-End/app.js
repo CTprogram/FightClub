@@ -4,6 +4,7 @@ const cookie = require("cookie");
 const app = express();
 const mongoose = require("mongoose");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 
 const userRoutes = require("./Routes/UserRoutes");
@@ -36,15 +37,31 @@ mongoose.connect(
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
+
+const sessionStore = MongoStore.create({ mongoUrl: conn });
 
 app.use(
   session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
+    store: sessionStore,
+    cookie: { maxAge: new Date(Date.now() + 360000) },
   })
 );
+app.use(function (req, res, next) {
+  let username = req.session.username ? req.session.username : "";
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("username", username, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 1 week in number of seconds
+    })
+  );
+
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());

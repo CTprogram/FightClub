@@ -12,12 +12,16 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
+import { Navigate } from "react-router-dom";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { myContext } from "../../utils/context";
 
 const Login = () => {
   const navigate = useNavigate();
+  const ctx = useContext(myContext);
 
   const onSuccess = () => {
+    ctx.startPending();
     navigate("/home");
   };
 
@@ -44,11 +48,11 @@ const Login = () => {
         "Content-Type": "application/json",
       },
       mode: "cors",
+      credentials: "include",
       body: JSON.stringify(object),
     });
     const responseData = await response.json();
     console.log(responseData);
-    setUser(responseData);
 
     if (response.status === 200) {
       //on successful login do something
@@ -62,6 +66,7 @@ const Login = () => {
 
   const googleLogin = () => {
     window.open("http://localhost:3001/auth/google", "_self");
+    ctx.startPending();
   };
 
   return (

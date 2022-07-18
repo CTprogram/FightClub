@@ -103,7 +103,6 @@ router.post("/login/", function (req, res, next) {
       if (!result) return res.status(401).json({ err: "Invalid Password" });
       // initialize cookie
 
-      req.session.username = username;
       res.setHeader(
         "Set-Cookie",
         cookie.serialize("username", username, {
@@ -111,6 +110,8 @@ router.post("/login/", function (req, res, next) {
           maxAge: 60 * 60 * 24 * 7,
         })
       );
+      console.log(username + " logged in");
+      req.session.username = username;
       return res.status(200).json({ username: username });
     });
   });
@@ -154,7 +155,11 @@ router.put("/forgotPassword/", function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
-  res.json({ user: req.user });
+  if (req.user) {
+    res.json({ user: req.user });
+  } else {
+    res.json({ user: req.session.username });
+  }
 });
 
 module.exports = router;

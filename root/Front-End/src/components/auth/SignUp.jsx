@@ -29,7 +29,6 @@ const SignUp = () => {
   //Will be used for Login
 
   const onSubmitRegister = async (data) => {
-    console.log(data);
     var formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
@@ -51,7 +50,6 @@ const SignUp = () => {
     });
 
     const responseData = await response.json();
-    console.log(responseData);
 
     if (response.status === 201) {
       onSuccess();
@@ -77,26 +75,22 @@ const SignUp = () => {
       <Card className={styles.card}>
         <div className={styles.formTitle}>Sign Up</div>
         <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
-          <div  className={styles.formElementTitle}>Username</div>
+          <div className={styles.formElementTitle}>Username</div>
           <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
           {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
-          <div  className={styles.formElementTitle}>Password</div>
+          <div className={styles.formElementTitle}>Password</div>
           <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
 
-          <div  className={styles.formElementTitle}>Email</div>
+          <div className={styles.formElementTitle}>Email</div>
           <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
 
-          <button id="signup" name="action" className={styles.signBtn}>
+          <button type="submit" id="signup" name="action" className={styles.signBtn}>
             Sign Up
           </button>
 
           <div className={styles.optionalText}>Have an account already?</div>
           <Link to="/login" className={styles.link}>
-            <button
-                className={styles.signinBtn}
-              >
-                Log In
-              </button>
+            <button className={styles.signinBtn}>Log In</button>
           </Link>
         </form>
       </Card>

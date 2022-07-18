@@ -1,14 +1,19 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 
 export const myContext = createContext({});
 export default function Context(props) {
   const [userObject, setUserObject] = useState(null);
   const [pending, setPending] = useState(true);
 
-  useEffect(() => {
+  const startPending = () => {
+    setPending(true);
+  };
+
+  const handleCheckLogin = useCallback(() => {
     fetch("http://localhost:3001/api/user/", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data.user) {
           setUserObject(data.user);
           setPending(false);
@@ -16,7 +21,12 @@ export default function Context(props) {
           setPending(false);
         }
       });
-  }, []);
+  });
+  useEffect(() => {
+    if (pending) {
+      handleCheckLogin();
+    }
+  }, [pending]);
 
-  return <myContext.Provider value={{ userObject, pending }}>{props.children}</myContext.Provider>;
+  return <myContext.Provider value={{ userObject, pending, startPending }}>{props.children}</myContext.Provider>;
 }
