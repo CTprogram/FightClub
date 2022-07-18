@@ -10,13 +10,6 @@ import HealthBar from "./gameUI/HealthBar";
 import Waiting from "./gameUI/waiting-animation/Waiting";
 import image from "../../assets/kenji/Idle.png";
 const Game = () => {
-
-  const user = useContext(myContext);
-
-  if(!(user && user.username)) {
-    return <Navigate to="/"/>
-  }
-
   const canvasRef = useRef(null);
   const socket = useContext(SocketContext);
   const [currentPlayerHealth, setCurrentPlayerHealth] = useState(1);

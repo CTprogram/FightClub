@@ -19,7 +19,7 @@ const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = process.env.MONGODB_URI || "mongodb+srv://admin1:NNkd1Y0HB16cs97Y@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+const conn = process.env.MONGODB_URI || "mongodb://localhost:27017/game";
 
 mongoose.connect(
   conn,
@@ -45,7 +45,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -113,7 +112,7 @@ io.on("connection", (client) => {
         }
         break;
       case "s":
-        const settings = client.role === 1 ? {frames: PLAYER_ATTACK_FRAMES, delay: 1000}: {frames: ENEMY_ATTACK_FRAMES, delay: 0}; 
+        const settings = client.role === 1 ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 } : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
         if (!state.players[client.role - 1].attacking) {
           state.players[client.role - 1].attacking = true;
           setTimeout(() => {

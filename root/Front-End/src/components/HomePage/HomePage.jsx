@@ -1,10 +1,12 @@
 import { Button } from "@mui/material";
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../../utils/user";
+import { myContext } from "../../utils/context";
 import Room from "../game/room/Room";
 
 const HomePage = (props) => {
+  const user = useContext(myContext);
+  console.log(user);
   const [room, setRoom] = useState();
 
   const onPlayHandler = () => {

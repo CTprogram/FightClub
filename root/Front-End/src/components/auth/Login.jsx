@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
@@ -19,11 +13,9 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { UserContext } from "../../utils/user";
 
 const Login = () => {
   const navigate = useNavigate();
-  const {user, setUser} = useContext(UserContext);
 
   const onSuccess = () => {
     navigate("/home");
@@ -68,35 +60,19 @@ const Login = () => {
     }
   };
 
+  const googleLogin = () => {
+    window.open("http://localhost:3001/auth/google", "_self");
+  };
+
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
         <div className={styles.formTitle}>Log In</div>
-        <form
-          id="login-form"
-          className={styles.formContainer}
-          onSubmit={handleSubmit2(onSubmitLogin)}
-        >
+        <form id="login-form" className={styles.formContainer} onSubmit={handleSubmit2(onSubmitLogin)}>
           <div className={styles.formElementTitle}>Username </div>
-          <input
-            type="text"
-            autoComplete="username"
-            name="username"
-            {...register2("username", { maxLength: 30 })}
-            className={styles.formInput}
-            placeholder="Enter a username"
-            required
-          />
+          <input type="text" autoComplete="username" name="username" {...register2("username", { maxLength: 30 })} className={styles.formInput} placeholder="Enter a username" required />
           <div className={styles.formElementTitle}>Password </div>
-          <input
-            type="password"
-            autoComplete="current-password"
-            name="password"
-            {...register2("password")}
-            className={styles.formInput}
-            placeholder="Enter a password"
-            required
-          />
+          <input type="password" autoComplete="current-password" name="password" {...register2("password")} className={styles.formInput} placeholder="Enter a password" required />
 
           <button id="signin" name="signin" className={styles.signBtn}>
             Log In
@@ -105,7 +81,7 @@ const Login = () => {
           <div className={styles.optionalText}>Or login with</div>
 
           <div className={styles.btnContainer}>
-            <button id="authSignin" name="auth" className={styles.authBtn}>
+            <button onClick={googleLogin} id="authSignin" name="auth" className={styles.authBtn}>
               Google
             </button>
             <button id="authSignin" name="auth" className={styles.authBtn}>

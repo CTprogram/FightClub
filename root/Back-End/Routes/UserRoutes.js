@@ -27,58 +27,51 @@ router.post("/register/", function (req, res, next) {
   }
   var username = req.body.username;
   var password = req.body.password;
-  user.find(
-    { $or: [{ email: req.body.email }, { username: req.body.username }] },
-    function (err, userDoc) {
+  user.find({ $or: [{ email: req.body.email }, { username: req.body.username }] }, function (err, userDoc) {
+    if (err) return res.status(500).json({ error: err });
+
+    //Determine if email or username already exists
+    if (userDoc.length > 0) {
+      if (userDoc[0].username === req.body.username) {
+        return res.status(409).json({
+          error: "username " + req.body.username + " already exists",
+        });
+      } else if (userDoc[0].email === req.body.email) {
+        return res.status(409).json({ error: "email " + req.body.email + " already exists" });
+      }
+    }
+
+    bcrypt.genSalt(10, function (err, salt) {
       if (err) return res.status(500).json({ error: err });
 
-      //Determine if email or username already exists
-      if (userDoc.length > 0) {
-        if (userDoc[0].username === req.body.username) {
-          return res.status(409).json({
-            error: "username " + req.body.username + " already exists",
-          });
-        } else if (userDoc[0].email === req.body.email) {
-          return res
-            .status(409)
-            .json({ error: "email " + req.body.email + " already exists" });
-        }
-      }
-
-      bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
         if (err) return res.status(500).json({ error: err });
 
-        bcrypt.hash(password, salt, function (err, hash) {
-          if (err) return res.status(500).json({ error: err });
-
-          const regUserItem = new user({
-            username: req.body.username,
-            password: hash,
-            email: req.body.email,
-          });
-
-          regUserItem
-            .save()
-            .then((data) => {
-              req.session.username = username;
-              res.setHeader(
-                "Set-Cookie",
-                cookie.serialize("username", username, {
-                  path: "/",
-                  maxAge: 60 * 60 * 24 * 7,
-                })
-              );
-              return res
-                .status(201)
-                .json({ username: req.body.username, email: req.body.email });
-            })
-            .catch((err) => {
-              return res.status(500).json({ error: err });
-            });
+        const regUserItem = new user({
+          username: req.body.username,
+          password: hash,
+          email: req.body.email,
         });
+
+        regUserItem
+          .save()
+          .then((data) => {
+            req.session.username = username;
+            res.setHeader(
+              "Set-Cookie",
+              cookie.serialize("username", username, {
+                path: "/",
+                maxAge: 60 * 60 * 24 * 7,
+              })
+            );
+            return res.status(201).json({ username: req.body.username, email: req.body.email });
+          })
+          .catch((err) => {
+            return res.status(500).json({ error: err });
+          });
       });
-    }
-  );
+    });
+  });
 });
 
 router.post("/login/", function (req, res, next) {
@@ -147,10 +140,7 @@ router.put("/forgotPassword/", function (req, res, next) {
           from: "fightclubCSCC09@hotmail.com",
           to: req.body.email,
           subject: "Fight Club password recovery",
-          text:
-            "Your follow password recovery code is " +
-            code +
-            ". Code Expires in 15 minutes",
+          text: "Your follow password recovery code is " + code + ". Code Expires in 15 minutes",
         };
 
         sendEmail(emailOptions);
@@ -163,8 +153,8 @@ router.put("/forgotPassword/", function (req, res, next) {
   });
 });
 
-router.get("/" , function (req, res, next) {
-  res.json({user: req.user});
+router.get("/", function (req, res, next) {
+  res.json({ user: req.user });
 });
 
 module.exports = router;

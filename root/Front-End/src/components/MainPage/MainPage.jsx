@@ -3,10 +3,6 @@ import styles from "./MainPage.module.css";
 import { Link, Outlet } from "react-router-dom";
 
 const MainPage = () => {
-  const googleLogin = () => {
-    window.open("http://localhost:3001/auth/google", "_self");
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.welcomeTitle}>Welcome to Fight Club!</div>
@@ -22,8 +18,6 @@ const MainPage = () => {
           <Link to="/signup">
             <button className={styles.signBtn}>Signup</button>
           </Link>
-
-          <button onClick={googleLogin}> Google Log In Test</button>
         </div>
       </div>
       <Outlet />

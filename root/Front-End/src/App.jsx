@@ -22,7 +22,6 @@ import { formHelperTextClasses } from "@mui/material";
 import styles from "./App.module.css";
 import Room from "./components/game/room/Room";
 import Navbar from "./components/Navbar/Navbar";
-import { UserContext } from "./utils/user";
 const menuItems = ["Home", "Leaderboard"];
 const profileItems = ["Account", "Logout"];
 import { socket, SocketContext } from "./utils/socket";
@@ -39,23 +38,26 @@ import { myContext } from "./utils/context";
 
 function App() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const user = React.useContext(myContext);
-  
+  const ctx = React.useContext(myContext);
+  const user = ctx.userObject;
+
   return (
     <div>
       <Navbar user={user} anchorElUser={anchorElUser} />
       <SocketContext.Provider value={socket}>
-            <BrowserRouter>
-              <Routes>
-                  <Route index element={user && user._id ? <HomePage/> : <MainPage />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="signup" element={<SignUp />} />
-                  <Route path="game" element={<Game />} />
-                  <Route path="home" element={<HomePage user={user}/>} />
-                  <Route path="forgetPassword" element={<ForgotPassword />} />
-                  <Route path="resetPassword" element={<ResetPassword />} />
-              </Routes>
-            </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<MainPage />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="game" element={<Game />} />
+              <Route path="home" element={<HomePage user={user} />} />
+            </Route>
+            <Route path="forgetPassword" element={<ForgotPassword />} />
+            <Route path="resetPassword" element={<ResetPassword />} />
+          </Routes>
+        </BrowserRouter>
       </SocketContext.Provider>
     </div>
   );
