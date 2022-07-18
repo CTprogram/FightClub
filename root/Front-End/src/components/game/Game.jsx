@@ -61,6 +61,19 @@ const Game = () => {
     // setLoad(true);
   }, []);
 
+  const handleGameEnd = useCallback((winner) => {
+    switch(winner) {
+      case 1:
+        alert('Player won!');
+        break;
+      case 2:
+        alert('Enemy won!');
+        break;
+      default:
+        alert("Game was a tie!");
+    }
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -70,11 +83,13 @@ const Game = () => {
     socket.on("gameSnapShot", handleGameSnapShot);
     socket.on("init", handleInit);
     socket.on("gameInProgress", handleGameInProgress);
+    socket.on("gameEnded", handleGameEnd);
 
     return () => {
       socket.off("gameSnapShot", handleGameSnapShot);
       socket.off("init", handleInit);
       socket.off("gameInProgress", handleGameInProgress);
+      socket.off("gameEnded", handleGameEnd);
     };
   }, [socket, gameCode, load]);
 

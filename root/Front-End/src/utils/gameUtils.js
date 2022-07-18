@@ -9,6 +9,8 @@ import pTwoFallImage from "../assets/Medieval-King-Pack-2/Sprites/Fall_flipped.p
 import pOneAttack1Image from "../assets/Fantasy-Warrior/Fantasy-Warrior/Sprites/Attack1.png";
 import pTwoAttack1Image from "../assets/Medieval-King-Pack-2/Sprites/Attack1_flipped.png";
 import backgroundImage from "../assets/background.png";
+import pOneDeath from "../assets/Fantasy-Warrior/Fantasy-Warrior/Sprites/Death.png";
+import pTwoDeath from "../assets/Medieval-King-Pack-2/Sprites/Death.png";
 
 const BG_COLOUR = "#231f20";
 let init = false;
@@ -48,13 +50,13 @@ class Sprite {
     // }
   }
 
-  goThroughFrames() {
+  goThroughFrames(halt = false) {
     this.framesElapsed++;
     if (this.framesElapsed % this.framesHold === 0) {
       if (this.framesCurrent < this.framesMax - 1) {
         this.framesCurrent++;
       } else {
-        this.framesCurrent = 0;
+        if(!halt) this.framesCurrent = 0;
       }
     }
   }
@@ -80,7 +82,7 @@ class Fighter extends Sprite {
     this.height = 50;
     this.lastKey;
     this.attackBox = attackBox;
-
+    this.isDying = false;
     this.attacking = attacking;
     this.framesCurrent = 0;
     this.framesElapsed = 0;
@@ -129,12 +131,19 @@ class Fighter extends Sprite {
           this.framesCurrent = 0;
         }
         break;
+      case "death":
+        if (this.image !== this.sprites.death.image) {
+          this.image = this.sprites.death.image;
+          this.framesMax = this.sprites.death.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
     }
   }
 
   update() {
     this.draw();
-    this.goThroughFrames();
+    this.goThroughFrames(this.isDying);
   }
 }
 
@@ -148,7 +157,8 @@ const handleGameState = (gameState, canvas, ctx) => {
         run: { imgSrc: pOneRunImage, framesMax: 8 }, 
         jump: { imgSrc: pOneJumpImage, framesMax: 3 }, 
         fall: { imgSrc: pOneFallImage, framesMax: 3 },
-        attack1: { imgSrc: pOneAttack1Image, framesMax: 7 }
+        attack1: { imgSrc: pOneAttack1Image, framesMax: 7 },
+        death: { imgSrc: pOneDeath, framesMax: 7 },
       },
       ctx,
       pOneIdleImage,
@@ -164,6 +174,7 @@ const handleGameState = (gameState, canvas, ctx) => {
         jump: { imgSrc: pTwoJumpImage, framesMax: 2 }, 
         fall: { imgSrc: pTwoFallImage, framesMax: 2 },
         attack1: { imgSrc: pTwoAttack1Image, framesMax: 4 }, 
+        death: { imgSrc: pTwoDeath, framesMax: 6 },
       },
       ctx,
       pTwoIdleImage,
@@ -184,46 +195,57 @@ const handleGameState = (gameState, canvas, ctx) => {
   playerOne.velocity = gameState.players[0].velocity;
   playerOne.attackBox = gameState.players[0].attackBox;
   playerOne.attacking = gameState.players[0].attacking;
+  playerOne.isDying = gameState.players[0].isDying;
   playerTwo.position = gameState.players[1].position;
   playerTwo.velocity = gameState.players[1].velocity;
   playerTwo.attackBox = gameState.players[1].attackBox;
   playerTwo.attacking = gameState.players[1].attacking;
+  playerTwo.isDying = gameState.players[1].isDying;
 
-  if(playerOne.attacking) {
-    console.log('attacking');
-    playerOne.switchSprite("attack1");
-  } else {
-    if (playerOne.velocity.y > 0) {
-      playerOne.switchSprite("jump");
-      console.log("jump");
-    } else if (playerOne.velocity.y < 0) {
-      playerOne.switchSprite("fall");
-      console.log("fall");
+  if(!playerOne.isDying) {
+    if(playerOne.attacking) {
+      console.log('attacking');
+      playerOne.switchSprite("attack1");
     } else {
-      if (playerOne.velocity.x != 0) {
-        playerOne.switchSprite("run");
-        console.log("run");
+      if (playerOne.velocity.y > 0) {
+        playerOne.switchSprite("jump");
+        console.log("jump");
+      } else if (playerOne.velocity.y < 0) {
+        playerOne.switchSprite("fall");
+        console.log("fall");
       } else {
-        playerOne.switchSprite("idle");
-        console.log("idle");
+        if (playerOne.velocity.x != 0) {
+          playerOne.switchSprite("run");
+          console.log("run");
+        } else {
+          playerOne.switchSprite("idle");
+          console.log("idle");
+        }
       }
     }
+  } else {
+    playerOne.switchSprite("death");
   }
 
-  if(playerTwo.attacking){
-    playerTwo.switchSprite("attack1");
-  } else {
-    if (playerTwo.velocity.y > 0) {
-      playerTwo.switchSprite("jump");
-    } else if (playerTwo.velocity.y < 0) {
-      playerTwo.switchSprite("fall");
+
+  if(!playerTwo.isDying) {
+    if(playerTwo.attacking){
+      playerTwo.switchSprite("attack1");
     } else {
-      if (playerTwo.velocity.x != 0) {
-        playerTwo.switchSprite("run");
+      if (playerTwo.velocity.y > 0) {
+        playerTwo.switchSprite("jump");
+      } else if (playerTwo.velocity.y < 0) {
+        playerTwo.switchSprite("fall");
       } else {
-        playerTwo.switchSprite("idle");
+        if (playerTwo.velocity.x != 0) {
+          playerTwo.switchSprite("run");
+        } else {
+          playerTwo.switchSprite("idle");
+        }
       }
     }
+  } else {
+    playerTwo.switchSprite("death");
   }
 
   // gameState = JSON.parse(gameState);

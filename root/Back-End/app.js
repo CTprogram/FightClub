@@ -15,7 +15,7 @@ const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
-const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET, PLAYER_ATTACK_FRAMES, ENEMY_ATTACK_FRAMES } = require("./utils/constants");
+const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET, PLAYER_ATTACK_FRAMES, ENEMY_ATTACK_FRAMES, DEATH_DELAY } = require("./utils/constants");
 const { makeid } = require("./utils/utilities");
 const port = 3001;
 
@@ -115,28 +115,30 @@ io.on("connection", (client) => {
   function keyDown(key) {
     const roomId = clientToRoom[client.id];
     const state = roomToState[roomId];
-    switch (key) {
-      case "a":
-        state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
-        break;
-      case "d":
-        state.players[client.role - 1].velocity.x = CHARACTER_HORIZONTAL_SPEED;
-        break;
-      case "w":
-        if (state.players[client.role - 1].onGround) {
-          state.players[client.role - 1].velocity.y = CHARACTER_JUMP_OFFSET;
-          state.players[client.role - 1].onGround = false;
-        }
-        break;
-      case "s":
-        const settings = client.role === 1 ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 } : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
-        if (!state.players[client.role - 1].attacking) {
-          state.players[client.role - 1].attacking = true;
-          setTimeout(() => {
-            state.players[client.role - 1].attacking = false;
-          }, (1000 / FRAME_RATE) * settings.frames);
-        }
-        break;
+    if(!state.players[client.role - 1].isDying){
+      switch (key) {
+        case "a":
+          state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
+          break;
+        case "d":
+          state.players[client.role - 1].velocity.x = CHARACTER_HORIZONTAL_SPEED;
+          break;
+        case "w":
+          if (state.players[client.role - 1].onGround) {
+            state.players[client.role - 1].velocity.y = CHARACTER_JUMP_OFFSET;
+            state.players[client.role - 1].onGround = false;
+          }
+          break;
+        case "s":
+          const settings = client.role === 1 ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 } : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
+          if (!state.players[client.role - 1].attacking) {
+            state.players[client.role - 1].attacking = true;
+            setTimeout(() => {
+              state.players[client.role - 1].attacking = false;
+            }, (1000 / FRAME_RATE) * settings.frames);
+          }
+          break;
+      }
     }
   }
 
@@ -156,6 +158,7 @@ io.on("connection", (client) => {
 });
 
 function startGame(state, roomId) {
+  let gameOverFlag = false;
   const interval = setInterval(() => {
     const decision = gameLoop(state);
 
@@ -163,8 +166,16 @@ function startGame(state, roomId) {
       console.log(JSON.stringify(state));
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
-      clearInterval(interval);
-      io.sockets.in(roomId).emit("gameEnded", decision);
+      gameOverFlag = true;
+      if(gameOverFlag) {
+        setTimeout(() => {
+          io.sockets.in(roomId).emit("gameEnded", decision);
+          clearInterval(interval);
+        }, DEATH_DELAY);
+        gameOverFlags = false;
+      }
+
+      io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     }
   }, 1000 / FRAME_RATE);
 
