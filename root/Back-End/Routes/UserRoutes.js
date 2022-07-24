@@ -155,10 +155,11 @@ router.put("/forgotPassword/", function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
-  if (req.user) {
-    res.json({ user: req.user });
+  if (req.user && req.user.username || req.session.username) {
+    const user = req.user && req.user.username || req.session.username;
+    res.json({ user: user });
   } else {
-    res.json({ user: req.session.username });
+    res.json({ user: {} });
   }
 });
 

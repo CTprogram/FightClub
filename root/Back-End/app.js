@@ -20,7 +20,7 @@ const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = process.env.MONGODB_URI || "mongodb+srv://admin2:js9VAC5SmA69nhHc@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+const conn = process.env.MONGODB_URI || "mongodb://mongo:27017/gameority";
 
 mongoose.connect(
   conn,
