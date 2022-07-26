@@ -40,7 +40,7 @@ const SignUp = () => {
       object[key] = value;
     });
 
-    const response = await fetch("http://localhost:3001/api/user/register/", {
+    const response = await fetch(`${getExpressBaseURI()}/api/user/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

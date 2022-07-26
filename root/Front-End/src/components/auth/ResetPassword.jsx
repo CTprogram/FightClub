@@ -40,7 +40,7 @@ const ResetPassword = () => {
     });
 
     const response = await fetch(
-      "http://localhost:3001/api/user/resetPassword/",
+      `${getExpressBaseURI()}/api/user/resetPassword/`,
       {
         method: "Put",
         headers: {

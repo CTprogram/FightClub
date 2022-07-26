@@ -9,6 +9,7 @@ import styles from "./ForgotPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { getExpressBaseURI } from "../../utils/constants";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -32,8 +33,7 @@ const ForgotPassword = () => {
       object[key] = value;
     });
     
-
-    const response = await fetch("http://localhost:3001/api/user/forgotPassword/", {
+    const response = await fetch(`${getExpressBaseURI()}/api/user/forgotPassword/`, {
       method: "Put",
       headers: {
         "Content-Type": "application/json",

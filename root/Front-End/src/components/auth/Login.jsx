@@ -15,6 +15,7 @@ import Card from "../UI/Card";
 import { Navigate } from "react-router-dom";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { myContext } from "../../utils/context";
+import { getExpressBaseURI } from "../../utils/constants";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const Login = () => {
       object[key] = value;
     });
 
-    const response = await fetch("http://localhost:3001/api/user/login/", {
+    const response = await fetch(`${getExpressBaseURI()}/api/user/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +66,7 @@ const Login = () => {
   };
 
   const googleLogin = () => {
-    window.open("http://localhost:3001/auth/google", "_self");
+    window.open(`${getExpressBaseURI()}/auth/google`, "_self");
     ctx.startPending();
   };
 

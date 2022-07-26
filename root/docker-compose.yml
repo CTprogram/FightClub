@@ -2,16 +2,18 @@ version: '3'
 services:
   api:
     container_name: api-container
-    restart: always
-    build: ./Back-End
+    image: ghcr.io/khanm253/express-env-1:latest
+    expose:
+      - "3001"
     ports: 
       - "3001:3001"
     depends_on:
       - mongo
   client:
     container_name: client-container
-    restart: always
-    build: ./Front-End
+    image: ghcr.io/khanm253/client-env-3:latest 
+    expose:
+      - "3000"
     ports:
       - "3000:3000"
     depends_on:

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+      - name: client
+        image: ghcr.io/khanm253/client-env-3:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: EXPRESS_URI
+          value: "express-service.default.svc.cluster.local:3001"

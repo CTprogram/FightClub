@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState, useCallback } from "react";
+import { getExpressBaseURI } from "./constants";
 
 export const myContext = createContext({});
 export default function Context(props) {
@@ -10,7 +11,7 @@ export default function Context(props) {
   };
 
   const handleCheckLogin = useCallback(() => {
-    fetch("http://localhost:3001/api/user/", { credentials: "include" })
+    fetch(`${getExpressBaseURI()}/api/user/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
