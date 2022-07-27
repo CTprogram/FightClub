@@ -37,7 +37,7 @@ mongoose.connect(
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
+app.use(cors({ origin: "http://206.189.252.241:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
 
 const sessionStore = MongoStore.create({ mongoUrl: conn });
 
@@ -193,4 +193,5 @@ const http = require("http");
 
 httpServer.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
+  console.log("Hello updated")
 });

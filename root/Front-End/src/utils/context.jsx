@@ -11,7 +11,7 @@ export default function Context(props) {
   };
 
   const handleCheckLogin = useCallback(() => {
-    fetch(`${getExpressBaseURI()}/api/user/`, { credentials: "include" })
+    fetch(`${getExpressBaseURI()}/api/user/`, { credentials: "include", })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
