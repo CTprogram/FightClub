@@ -16,10 +16,12 @@ import { Navigate } from "react-router-dom";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { myContext } from "../../utils/context";
 import { getExpressBaseURI } from "../../utils/constants";
+import { useToasts } from 'react-toast-notifications';
 
 const Login = () => {
   const navigate = useNavigate();
   const ctx = useContext(myContext);
+  const { addToast } = useToasts();
 
   const onSuccess = () => {
     ctx.startPending();
@@ -58,10 +60,12 @@ const Login = () => {
     if (response.status === 200) {
       //on successful login do something
       onSuccess();
+      addToast('Logged in Successfully', { appearance: 'success', autoDismiss: true });
       document.getElementById("login-form").reset();
     } else if (response.status === 401) {
-      //invalid password or email
+      addToast('Invalid password or email', { appearance: 'error', autoDismiss: true });
     } else if (response.status === 400) {
+      addToast('Email or password missing.', { appearance: 'error', autoDismiss: true });
     }
   };
 

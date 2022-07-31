@@ -9,9 +9,10 @@ const passport = require("passport");
 
 const userRoutes = require("./Routes/UserRoutes");
 const oAuthRoutes = require("./Routes/OAuthRoutes");
+const leaderboardRoutes = require("./Routes/Leaderboard");
 //Middleware to parse
 const httpServer = require("http").Server(app);
-const io = require("socket.io")(httpServer, { cors: "*" });
+const io = require("socket.io")(httpServer, { cors: "*"});
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
@@ -20,7 +21,7 @@ const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = process.env.MONGODB_URI || "mongodb://mongo:27017/gameority";
+const conn = process.env.MONGODB_URI || "mongodb+srv://admin3:X4uYaOWllwAHo24E@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(
   conn,
@@ -37,7 +38,7 @@ mongoose.connect(
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://206.189.252.241:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
 
 const sessionStore = MongoStore.create({ mongoUrl: conn });
 
@@ -50,6 +51,7 @@ app.use(
     cookie: { maxAge: new Date(Date.now() + 360000) },
   })
 );
+
 app.use(function (req, res, next) {
   let username = req.session.username ? req.session.username : "";
   res.setHeader(
@@ -68,6 +70,7 @@ app.use(passport.session());
 //Middleware
 app.use("/api/user/", userRoutes);
 app.use("/auth/", oAuthRoutes);
+app.use("/api/leaderboard/", leaderboardRoutes);
 //Socket Maps
 const clientToRoom = {};
 const roomToState = {};
@@ -101,6 +104,7 @@ io.on("connection", (client) => {
         client.role = 2;
         clientToRoom[client.id] = roomId;
         const roomState = roomToState[roomId];
+        client.emit("joinedGame");
         if (roomState) startGame(roomState, roomId);
       } else if (numOfUsers > 1) {
         client.emit("gameInProgress", roomId);
@@ -166,13 +170,12 @@ function startGame(state, roomId) {
       console.log(JSON.stringify(state));
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
-      gameOverFlag = true;
-      if(gameOverFlag) {
+      if(!gameOverFlag) {
         setTimeout(() => {
-          io.sockets.in(roomId).emit("gameEnded", decision);
+          io.sockets.in(roomId).emit("gameEnded", decision, state);
           clearInterval(interval);
         }, DEATH_DELAY);
-        gameOverFlags = false;
+        gameOverFlag = true;
       }
 
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));

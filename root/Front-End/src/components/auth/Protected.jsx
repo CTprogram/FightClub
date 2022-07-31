@@ -3,6 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { myContext } from "../../utils/context";
 import MainPage from "../MainPage/MainPage";
 import Waiting from "../game/gameUI/waiting-animation/Waiting";
+import { CircularProgress } from "@mui/material";
 
 function ProtectedRoute() {
   const ctx = useContext(myContext);
@@ -11,7 +12,7 @@ function ProtectedRoute() {
   console.log(pending + "user " + user);
   return (
     <div>
-      {pending && <Waiting loading={true} />}
+      {pending && <CircularProgress/>}
       {!pending && (user ? <Outlet /> : <Navigate to="login" />)}
     </div>
   );

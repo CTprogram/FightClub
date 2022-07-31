@@ -1,0 +1,35 @@
+.board {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 440px;
+    height: 100%;
+    width: 95%;
+    margin: auto;
+}
+
+.title {
+    color: white;
+    font-weight: 800;
+    text-align: center;
+    font-size: x-large;
+    background-color: #6741d9;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 8px;
+    border: 3px inset #66d9e8;
+    border-radius: 10px;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+
+.rows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    padding: 5px 0;
+    margin-top: 10px;
+    max-height: 100%;
+    overflow-y: scroll;
+}

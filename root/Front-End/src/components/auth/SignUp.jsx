@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
+import { getExpressBaseURI } from "../../utils/constants";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const SignUp = () => {

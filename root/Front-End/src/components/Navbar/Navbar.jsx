@@ -17,8 +17,9 @@ import AdbIcon from "@mui/icons-material/Adb";
 import SportsMmaIcon from "@mui/icons-material/SportsMma";
 import axios from "axios";
 import { formHelperTextClasses } from "@mui/material";
+import { getExpressBaseURI } from "../../utils/constants";
 const menuItems = ["Home", "Leaderboard"];
-const profileItems = ["Account", "Logout"];
+const profileItems = ["Logout"];
 const Navbar = (props) => {
   const openUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -27,6 +28,16 @@ const Navbar = (props) => {
   const closeUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const userLogout = async  () => {
+    const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, {
+      method: "POST",
+      mode: "cors",
+    });
+    const responseData = await response.json();
+    window.location.assign('/');
+  }
+
   return (
     <div className={styles.container}>
       <AppBar className={styles.Menu} style={{ position: "static" }}>
@@ -71,7 +82,7 @@ const Navbar = (props) => {
                 onClose={closeUserMenu}
               >
                 {profileItems.map((item) => (
-                  <MenuItem key={item} onClick={closeUserMenu}>
+                  <MenuItem key={item} onClick={userLogout}>
                     <Typography textAlign="center">{item}</Typography>
                   </MenuItem>
                 ))}

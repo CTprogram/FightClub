@@ -9,9 +9,13 @@ import styles from "./Game.module.css";
 import HealthBar from "./gameUI/HealthBar";
 import Waiting from "./gameUI/waiting-animation/Waiting";
 import image from "../../assets/kenji/Idle.png";
+import { useToasts } from 'react-toast-notifications';
+import { getExpressBaseURI } from "../../utils/constants";
+
 const Game = () => {
   const canvasRef = useRef(null);
   const socket = useContext(SocketContext);
+  const { addToast } = useToasts();
   const [currentPlayerHealth, setCurrentPlayerHealth] = useState(1);
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState(1);
   const [canvasWidth, setCanvasWidth] = useState(0);
@@ -20,8 +24,13 @@ const Game = () => {
   const [gameCode, setGameCode] = useState("");
   const [playerOne, setPlayerOne] = useState(null);
   const [playerTwo, setPlayerTwo] = useState(null);
+  const [gameOver, setgameOver] = useState(false)
+  const [currentPlayerRole, setcurrentPlayerRole] = useState(null);
   const [time, setTime] = useState(0);
+  const ctx = React.useContext(myContext);
+  const user = ctx.userObject;
 
+  console.log('CURRENT PLAYER: ',user);
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     let seconds = time % 60;
@@ -52,27 +61,47 @@ const Game = () => {
 
   const handleInit = useCallback((gameCode) => {
     setGameCode(gameCode);
+    setcurrentPlayerRole(1);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
   }, []);
 
   const handleGameInProgress = useCallback((roomId) => {
-    // setLoad(true);
+    //setcurrentPlayerRole(2);
   }, []);
 
-  const handleGameEnd = useCallback((winner) => {
-    switch(winner) {
-      case 1:
-        alert('Player won!');
-        break;
-      case 2:
-        alert('Enemy won!');
-        break;
-      default:
-        alert("Game was a tie!");
-    }
-  }, []);
+  const handleJoinedGame = useCallback(() => {
+    setcurrentPlayerRole(2);
+  }, [currentPlayerRole]);
+
+  const handleGameEnd = (winner, state) => {
+      const body = {
+        player : user.username,
+        playerHealth : state.players[currentPlayerRole - 1].health,
+        isWin : winner === currentPlayerRole,
+        decision : winner
+      };
+      fetch(`${getExpressBaseURI()}/api/leaderboard/records`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        if (!res.ok) {
+          // if (res.status === 400) {
+          //   throw new Error("Cannot signup without username or password.");
+          // } else if (res.status === 409) {
+          //   throw new Error("Username is already taken.");
+          // } else {
+          //   throw new Error(res.statusText);
+          // }
+          console.log('not ok');
+        }
+      });
+      console.log(body);
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -84,6 +113,7 @@ const Game = () => {
     socket.on("init", handleInit);
     socket.on("gameInProgress", handleGameInProgress);
     socket.on("gameEnded", handleGameEnd);
+    socket.on("joinedGame", handleJoinedGame);
 
     return () => {
       socket.off("gameSnapShot", handleGameSnapShot);
@@ -104,6 +134,7 @@ const Game = () => {
 
   return (
     <div className={styles.wrapper}>
+      <p>Current role: {currentPlayerRole}</p>
       <div className={styles.gameScreen} style={canvasRef.current && { width: canvasRef.current.width }}>
         <canvas className={styles.myCanvas} tabIndex={0} autoFocus ref={canvasRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
         {load && (

@@ -15,10 +15,8 @@ import ProtectedRoute from "./components/auth/Protected";
 import Context from "./utils/context";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <Context>
       <App/>
     </Context>
-  </React.StrictMode>
 );
 

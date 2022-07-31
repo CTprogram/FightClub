@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 800px;
 }
 
 .card {
   background-color: white;
   border: 2px solid black;
+  margin: auto;
   padding-left: 300px;
   padding: 15px 30px 200px 30px;
   width: 35em;
