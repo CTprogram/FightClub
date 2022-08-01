@@ -12,7 +12,7 @@ const oAuthRoutes = require("./Routes/OAuthRoutes");
 const leaderboardRoutes = require("./Routes/Leaderboard");
 //Middleware to parse
 const httpServer = require("http").Server(app);
-const io = require("socket.io")(httpServer, { cors: "*"});
+const io = require("socket.io")(httpServer, { cors: "*" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
@@ -21,7 +21,7 @@ const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = process.env.MONGODB_URI || "mongodb+srv://admin3:X4uYaOWllwAHo24E@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+const conn = "mongodb+srv://admin3:X4uYaOWllwAHo24E@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(
   conn,
@@ -119,7 +119,7 @@ io.on("connection", (client) => {
   function keyDown(key) {
     const roomId = clientToRoom[client.id];
     const state = roomToState[roomId];
-    if(!state.players[client.role - 1].isDying){
+    if (!state.players[client.role - 1].isDying) {
       switch (key) {
         case "a":
           state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
@@ -170,7 +170,7 @@ function startGame(state, roomId) {
       console.log(JSON.stringify(state));
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
-      if(!gameOverFlag) {
+      if (!gameOverFlag) {
         setTimeout(() => {
           io.sockets.in(roomId).emit("gameEnded", decision, state);
           clearInterval(interval);
@@ -196,5 +196,5 @@ const http = require("http");
 
 httpServer.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
-  console.log("Hello updated")
+  console.log("Hello updated");
 });

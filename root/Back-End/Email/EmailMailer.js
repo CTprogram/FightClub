@@ -3,8 +3,8 @@ const nodemailer = require("nodemailer");
 var transporter = nodemailer.createTransport({
   service: "Hotmail",
   auth: {
-    user: "fightclubCSCC09@hotmail.com",
-    pass: "CSCC09Fightclub",
+    user: "CSCC09fightclub@hotmail.com",
+    pass: "FightclubCSCC09@123",
   },
 });
 

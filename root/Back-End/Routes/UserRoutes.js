@@ -7,6 +7,7 @@ const sendEmail = require("../Email/EmailMailer");
 const ResetPassword = require("../db/Models/ResetPasswordSchema");
 const crypto = require("crypto");
 const sanitize = require("mongo-sanitize");
+const authMiddleware = require("../Middleware/auth");
 
 router.post("/register/", function (req, res, next) {
   const requiredSchema = ["username", "password", "email"];
@@ -126,8 +127,10 @@ router.post("/login/", function (req, res, next) {
 
 router.post("/logout/", function (req, res, next) {
   if (req.user || req.session.username) {
+    req.session.username = "";
+    req.user = {};
     req.session.destroy();
-    res.clearCookie("conncet.sid");
+    res.clearCookie("connect.sid");
     return res.status(200).json({ message: "Succesfully logged out" });
   } else {
     return res.status(200).json({ message: "Not logged in" });
@@ -212,12 +215,11 @@ router.put("/forgotPassword/", function (req, res, next) {
       email: req.body.email,
       resetCode: code,
     });
-
     resetPwdItem
       .save()
       .then(() => {
         let emailOptions = {
-          from: "fightclubCSCC09@hotmail.com",
+          from: "CSCC09fightclub@hotmail.com",
           to: req.body.email,
           subject: "Fight Club password recovery",
           text:
@@ -227,8 +229,7 @@ router.put("/forgotPassword/", function (req, res, next) {
         };
 
         sendEmail(emailOptions);
-
-        return res.status(200);
+        return res.status(200).json({ msg: "Recovery email with code sent" });
       })
       .catch((err) => {
         return res.status(500).json({ error: err });
@@ -236,12 +237,29 @@ router.put("/forgotPassword/", function (req, res, next) {
   });
 });
 
-router.get("/", function (req, res, next) {
-  if (req.user && req.user.username || req.session.username) {
-    const user = req.user && req.user.username || req.session.username;
-    res.json({ user: { username: user} });
+router.get("/", authMiddleware, function (req, res, next) {
+  if ((req.user && req.user.username) || req.session.username) {
+    const user = (req.user && req.user.username) || req.session.username;
+    res.json({ user: { username: user } });
   } else {
     res.json({ user: {} });
+  }
+});
+
+router.get("/logout/", function (req, res, next) {
+  if(req.user || req.session && req.session.username) {
+    if(req.user) {
+      req.user = {};
+      req.logout((err) => {
+        return res.status(500).json({error: err});
+      });
+    } else if(req.session && req.session.username) {
+      req.session.username = "";
+      req.session.destroy();
+    }
+    return res.status(200).json({ message: "Succesfully logged out" });
+  } else {
+    return res.status(404).json({ message: "No user to logout" });
   }
 });
 

@@ -42,11 +42,10 @@ const ForgotPassword = () => {
       body: JSON.stringify(object),
     });
 
-    console.log(response.status);
+    const responseData = await response.json();
     if (response.status === 200) {
       //on successful login do something
       onSuccess();
-      console.log("successfully sent email to reset");
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {
       //invalid password or email
@@ -64,7 +63,7 @@ const ForgotPassword = () => {
           onSubmit={handleSubmit(onSubmitForgotPassword)}
         >
 
-          <div className={styles.formElementTitle}>Enter your email to reset your password</div>
+          <div className={styles.formElementTitle}>Enter your email</div>
           <input
             type="email"
             autoComplete="Email"

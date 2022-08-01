@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: clamp(1rem, 7vw, 200px);
+  width: 100vw;
+  align-items: center;
 }
 
 .card {
@@ -10,7 +13,13 @@
   margin: auto;
   padding: 15px 30px 200px 30px;
   width: 35em;
+  max-width: 80vw;
   height: 25em;
+  transition: 500ms ease-in-out;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 0px 40px 10px rgb(0 26 255 / 75%);
 }
 
 .UserMenuContainer {
@@ -25,6 +34,12 @@
 .formElement {
   margin-bottom: 10px;
   font-size: 25px;
+  border: none;
+  border-bottom: 1px solid black;
+  margin-top: 18px;
+}
+.formElement:focus-visible {
+  outline: none;
 }
 
 .formElementTitle {
@@ -48,14 +63,20 @@
 .signBtn {
   font-size: 2em;
   margin-top: 20px;
-  background-color: white;
+  background-color: #1098ad;
   padding: 10px 10px 10px 10px;
-  border: 2px solid black;
-  color: black;
+  border-radius: 4px;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .signBtn:hover {
-  background-color: black;
+  background-color: #15aabf;
   color: white;
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 0px 0px 40px 10px rgba(103, 65, 217, 0.1);
 }
 
 .optionalText {
@@ -66,19 +87,26 @@
 .signinBtn {
   font-size: 2em;
   margin-top: 20px;
-  background-color: white;
   padding: 10px 10px 10px 10px;
-  border: 2px solid black;
-  color: black;
   margin-left: 20px;
   width: auto;
+  padding: 10px 10px 10px 10px;
+  border-radius: 4px;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-color: #1098ad;
 }
 .signinBtn:hover {
-  background-color: black;
+  background-color: #15aabf;
   color: white;
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 0px 0px 40px 10px rgba(103, 65, 217, 0.1);
 }
 
-.link{
+.link {
   display: flex;
   justify-content: space-evenly;
   text-decoration: none;

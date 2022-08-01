@@ -1,15 +1,17 @@
 .wrapper {
-    display: flex;
+  display: flex;
 }
 
 .gamePlay {
-    flex: 0.45;
-    border: 1px solid green;
+  flex: 0.45;
+  border: 1px solid green;
 }
 
 .leaderBoardSpace {
-    flex: 0.55;
-    height: 83vh;
-    min-height: 500px;
-    padding: 0px 25px;
+  flex: 0.55;
+  height: 83vh;
+  min-height: 500px;
+  height: calc(100vh - 80px);
+  padding: 0px 25px;
+  background-color: #f1f3f5;
 }

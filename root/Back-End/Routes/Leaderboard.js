@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const leaderboard = require('../db/Models/LeaderboardSchema');
+const authMiddleware = require("../Middleware/auth");
 
-router.post("/records/", function (req, res, next) {
+router.post("/records/", authMiddleware, function (req, res, next) {
     //Validate body
     if(!req.body.player || !req.body.playerHealth || req.body.isWin === undefined || !req.body.decision) {
         return res.status(400).json({errors: 
@@ -55,7 +56,7 @@ router.post("/records/", function (req, res, next) {
     });
 });
 
-router.get("/records/", function (req, res, next) {
+router.get("/records/", authMiddleware ,function (req, res, next) {
     leaderboard.find({}).sort({score: -1}).select('player games wins losses score').exec((err, docs) => {
         if(err) return res.status(500).json({errors: err});
 

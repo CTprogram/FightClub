@@ -1,26 +1,14 @@
-import styles from "./Navbar.module.css";
-import { useState } from "react";
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import SportsMmaIcon from "@mui/icons-material/SportsMma";
-import axios from "axios";
-import { formHelperTextClasses } from "@mui/material";
+import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 import { getExpressBaseURI } from "../../utils/constants";
-const menuItems = ["Home", "Leaderboard"];
-const profileItems = ["Logout"];
+import styles from "./Navbar.module.css";
+import { useContext } from "react";
+import { myContext } from "../../utils/context";
 const Navbar = (props) => {
+  const ctx = useContext(myContext);
+  const user = ctx.userObject;
+
   const openUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -29,71 +17,31 @@ const Navbar = (props) => {
     setAnchorElUser(null);
   };
 
-  const userLogout = async  () => {
-    const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, {
-      method: "POST",
-      mode: "cors",
-    });
+  const userLogout = async () => {
+    console.log("hello");
+    const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, { credentials: "include"}) 
     const responseData = await response.json();
-    window.location.assign('/');
-  }
+    console.log(responseData + "asasAS");
+    ctx.startPending();
+    window.location.assign("/");
+  };
 
   return (
     <div className={styles.container}>
-      <AppBar className={styles.Menu} style={{ position: "static" }}>
-        <Toolbar disableGutters className={styles.Menu}>
-          <div className={styles.LogoContainer}>
-            {/* <SportsMmaIcon className={styles.FightLogo} /> */}
-            <div className={styles.LogoTitle}>Fight Club</div>
-          </div>
-
-          {props.user && props.user.username && (
-            <Box className={styles.Menu}>
-              {menuItems.map((item) => (
-                <Button key={item} sx={{ my: 2, color: "white", display: "block" }}>
-                  {item}
-                </Button>
-              ))}
-            </Box>
-          )}
-
-          {props.user && props.user.username && (
-            <Box className={styles.UserMenuContainer}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={openUserMenu}>
-                  <Avatar alt="" src="" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                className={styles.userMenu}
-                id="menu-appbar"
-                anchorEl={props.anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(props.anchorElUser)}
-                onClose={closeUserMenu}
-              >
-                {profileItems.map((item) => (
-                  <MenuItem key={item} onClick={userLogout}>
-                    <Typography textAlign="center">{item}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-              <Typography variant="h6" className={styles.Username}>
-                {props.user.username}
-              </Typography>
-            </Box>
-          )}
-        </Toolbar>
-      </AppBar>
+      <div>
+        <Link to="/">
+          {" "}
+          <img className={styles.logo} src={logo} />{" "}
+        </Link>
+      </div>
+      {user && user.username && (
+        <div className={styles.menu}>
+          <h1 className={styles.menu__item}>{user.username}</h1>
+          <h1 className={`${styles.menu__item} ${styles.menu__logout}`} onClick={userLogout}>
+            Logout
+          </h1>
+        </div>
+      )}
     </div>
   );
 };

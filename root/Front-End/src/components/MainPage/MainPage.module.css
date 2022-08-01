@@ -1,9 +1,17 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  height: calc(100vh - 80px);
+  width: auto;
+  padding: 0 clamp(1rem, 7vw, 200px);
 }
 
+.content {
+  display: flex;
+  padding-top: 25vh;
+  flex-direction: column;
+  color: #fff;
+  align-items: flex-start;
+  gap: 16px;
+}
 .btnContainer {
   display: flex;
   flex-direction: row;
@@ -11,12 +19,14 @@
 }
 
 .welcomeTitle {
-  font-size: 4em;
+  font-size: 52px;
   text-align: center;
+  font-weight: 700;
 }
 .description {
-  font-size: 2em;
+  font-size: 44px;
   text-align: center;
+  font-weight: 400;
 }
 
 .btnItem {
@@ -24,14 +34,21 @@
 }
 
 .signBtn {
-  font-size: 2em;
+  font-size: 30px;
+  width: 100%;
+  border-radius: 4px;
   margin-top: 20px;
-  background-color: white;
+  background-color: #1098ad;
   padding: 15px 10px 15px 10px;
-  border: 2px solid black;
-  color: black;
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .signBtn:hover {
-  background-color: black;
+  background-color: #15aabf;
   color: white;
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
 }

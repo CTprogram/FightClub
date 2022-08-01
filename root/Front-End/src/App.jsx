@@ -35,19 +35,18 @@ import ForgotPassword from "./components/auth/ForgotPassword";
 import ResetPassword from "./components/auth/ResetPassword";
 import ProtectedRoute from "./components/auth/Protected";
 import { myContext } from "./utils/context";
-import { ToastProvider} from 'react-toast-notifications';
+import { ToastProvider } from "react-toast-notifications";
 
 function App() {
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const ctx = React.useContext(myContext);
   const user = ctx.userObject;
 
   return (
     <div>
-      <Navbar user={user} anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser}/>
       <SocketContext.Provider value={socket}>
         <ToastProvider placement="bottom-center" transitionDuration={50}>
           <BrowserRouter>
+            <Navbar />
             <Routes>
               <Route index element={<MainPage />} />
               <Route path="login" element={<Login />} />
@@ -56,7 +55,7 @@ function App() {
                 <Route path="game" element={<Game />} />
                 <Route path="home" element={<HomePage user={user} />} />
               </Route>
-              <Route path="forgetPassword" element={<ForgotPassword />} />
+              <Route path="forgotPassword" element={<ForgotPassword />} />
               <Route path="resetPassword" element={<ResetPassword />} />
             </Routes>
           </BrowserRouter>

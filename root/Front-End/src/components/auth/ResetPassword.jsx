@@ -9,6 +9,7 @@ import styles from "./ResetPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { getExpressBaseURI } from "../../utils/constants";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const ResetPassword = () => {
           "Content-Type": "application/json",
         },
         mode: "cors",
+        credentials: "include",
         body: JSON.stringify(object),
       }
     );
