@@ -10,9 +10,11 @@ import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { getExpressBaseURI } from "../../utils/constants";
+import { useToasts } from 'react-toast-notifications';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const { addToast } = useToasts();
   const {
     register,
     handleSubmit,
@@ -46,9 +48,11 @@ const ForgotPassword = () => {
     if (response.status === 200) {
       //on successful login do something
       onSuccess();
+      addToast('Successfully sent Reset Password Code', { appearance: 'success', autoDismiss: true });
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {
       //invalid password or email
+      addToast('Invalid Email', { appearance: 'error', autoDismiss: true });
     } else if (response.status === 400) {
     }
   };

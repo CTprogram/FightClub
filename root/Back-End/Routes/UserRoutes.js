@@ -160,42 +160,43 @@ router.put("/resetPassword/", function (req, res, next) {
   var password = sanitize(req.body.password);
   user.findOne({ email: email }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
-    if (!userDoc) return res.status(401).json({ err: "Invalid email" });
+    if (!userDoc) return res.status(401).json({ error: "Invalid email" });
+    else if (userDoc) {
+      ResetPassword.findOne(
+        { resetCode: sanitize(req.body.resetCode) },
+        function (err, resetItem) {
+          if (err) return res.status(500).json({ error: err });
+          if (!resetItem)
+            return res.status(401).json({ error: "Invalid reset Code" });
+          let date = new Date();
 
-    ResetPassword.findOne(
-      { resetCode: sanitize(req.body.resetCode) },
-      function (err, resetItem) {
-        if (err) return res.status(500).json({ error: err });
-        if (!resetItem)
-          return res.status(401).json({ err: "Invalid reset Code" });
-        let date = new Date();
-
-        //Check if 15 mins has pasted since we sent in verification
-        if (date.getTime() > resetItem.createdAt.getTime() + 900000) {
-          return res.status(410).json({ err: "Reset Code has expired" });
-        } else {
-          bcrypt.genSalt(10, function (err, salt) {
-            if (err) return res.status(500).json({ error: err });
-
-            bcrypt.hash(password, salt, function (err, hash) {
+          //Check if 15 mins has pasted since we sent in verification
+          if (date.getTime() > resetItem.createdAt.getTime() + 900000) {
+            return res.status(410).json({ error: "Reset Code has expired" });
+          } else {
+            bcrypt.genSalt(10, function (err, salt) {
               if (err) return res.status(500).json({ error: err });
 
-              user.updateOne(
-                { email: email },
-                { $set: { password: hash } },
-                function (err, response) {
-                  if (err) return res.status(500).json({ error: err });
+              bcrypt.hash(password, salt, function (err, hash) {
+                if (err) return res.status(500).json({ error: err });
 
-                  return res
-                    .status(200)
-                    .json({ status: "Password Successfuly Updated" });
-                }
-              );
+                user.updateOne(
+                  { email: email },
+                  { $set: { password: hash } },
+                  function (err, response) {
+                    if (err) return res.status(500).json({ error: err });
+
+                    return res
+                      .status(200)
+                      .json({ status: "Password Successfuly Updated" });
+                  }
+                );
+              });
             });
-          });
+          }
         }
-      }
-    );
+      );
+    }
   });
 });
 
@@ -207,7 +208,7 @@ router.put("/forgotPassword/", function (req, res, next) {
   }
   user.findOne({ email: req.body.email }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
-    if (!userDoc) return res.status(401).json({ err: "Invalid email" });
+    if (!userDoc) return res.status(401).json({ error: "Invalid email" });
 
     const code = crypto.randomBytes(8).toString("hex");
 
@@ -247,13 +248,13 @@ router.get("/", authMiddleware, function (req, res, next) {
 });
 
 router.get("/logout/", function (req, res, next) {
-  if(req.user || req.session && req.session.username) {
-    if(req.user) {
+  if (req.user || (req.session && req.session.username)) {
+    if (req.user) {
       req.user = {};
       req.logout((err) => {
-        return res.status(500).json({error: err});
+        return res.status(500).json({ error: err });
       });
-    } else if(req.session && req.session.username) {
+    } else if (req.session && req.session.username) {
       req.session.username = "";
       req.session.destroy();
     }

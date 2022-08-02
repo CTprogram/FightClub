@@ -10,9 +10,11 @@ import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { getExpressBaseURI } from "../../utils/constants";
+import { useToasts } from 'react-toast-notifications';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const { addToast } = useToasts();
 
   const onSuccess = (responseNum) => {
     if (responseNum === 1) {
@@ -52,17 +54,24 @@ const ResetPassword = () => {
         body: JSON.stringify(object),
       }
     );
-
+    const responseData = await response.json();
     if (response.status === 200) {
       //on successful login do something
       onSuccess(1);
-      console.log("successfully sent email to reset");
+      addToast('Reset password Successfully Completed', { appearance: 'success', autoDismiss: true });
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {
       //invalid password or email
+      if (responseData.error.includes("email")) {
+        addToast('Invalid Email', { appearance: 'error', autoDismiss: true });
+      }
+      else {
+        addToast('Invalid Reset Code', { appearance: 'error', autoDismiss: true });
+      }
+
     } else if (response.status === 410) {
       onSuccess(2);
-      console.log("Reset code expired");
+      addToast('Expired Reset Code', { appearance: 'error', autoDismiss: true });
     }
   };
 
@@ -87,8 +96,8 @@ const ResetPassword = () => {
 
           <div className={styles.formElementTitle}>Enter your new password</div>
           <input
-            type="text"
-            autoComplete="text"
+            type="password"
+            autoComplete="newPassword"
             {...register("password")}
             className={styles.formInput}
             placeholder="password"
