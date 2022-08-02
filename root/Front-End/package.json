@@ -12,14 +12,18 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.7",
+    "@react-three/drei": "^9.19.2",
+    "@react-three/fiber": "^8.2.2",
     "framer-motion": "^6.5.1",
+    "gltfjsx": "^5.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.33.1",
     "react-router-dom": "^6.3.0",
     "react-toast-notifications": "^2.5.1",
     "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1"
+    "socket.io-client": "^4.5.1",
+    "three": "^0.143.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
