@@ -23,6 +23,7 @@ export default function Context(props) {
         }
       });
   });
+  
   useEffect(() => {
     if (pending) {
       console.log("checking");

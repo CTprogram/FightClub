@@ -13,7 +13,6 @@ import pOneDeath from "../assets/Fantasy-Warrior/Fantasy-Warrior/Sprites/Death.p
 import pTwoDeath from "../assets/Medieval-King-Pack-2/Sprites/Death.png";
 
 const BG_COLOUR = "#231f20";
-let init = false;
 let playerOne, playerTwo;
 let background;
 class Sprite {
@@ -147,8 +146,8 @@ class Fighter extends Sprite {
   }
 }
 
-const handleGameState = (gameState, canvas, ctx) => {
-  if (!init) {
+const handleGameState = (gameState, canvas, ctx, initialized) => {
+  if (!initialized) {
     playerOne = new Fighter(
       { position: { x: 0, y: 200 }, velocity: { x: 0, y: 0 }, attackBox: { x: 0, y: 0 }, attacking: false },
       { x: 300, y: 230 },
@@ -189,7 +188,6 @@ const handleGameState = (gameState, canvas, ctx) => {
       {x:0, y:0},
       ctx
     );
-    init = true;
   }
   playerOne.position = gameState.players[0].position;
   playerOne.velocity = gameState.players[0].velocity;

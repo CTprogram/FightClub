@@ -61,7 +61,7 @@ const MainPage = () => {
           </motion.div>
         </div>
       </div>
-      <motion.div initial={{ opacity: 0, x: 500 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 3 }} className={styles.canvasContainer}>
+      <motion.div initial={{ opacity: 0, x: 500 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 2 }} className={styles.canvasContainer}>
         <Canvas>
           <OrbitControls />
           <ambientLight />

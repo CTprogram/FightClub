@@ -30,6 +30,7 @@ const Game = () => {
   const [currentPlayerRole, setcurrentPlayerRole] = useState(null);
   const [time, setTime] = useState(0);
   const [playerNames, setplayerNames] = useState([]);
+  let initialized = false;
   const ctx = React.useContext(myContext);
   const user = ctx.userObject;
 
@@ -42,6 +43,7 @@ const Game = () => {
     }
     return `${minutes}:${seconds}`;
   };
+  
   const handleGameSnapShot = useCallback(
     (state) => {
       if (!load) setLoad(true);
@@ -52,8 +54,10 @@ const Game = () => {
       state = JSON.parse(state);
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
-
-      handleGameState(state, canvas, ctx);
+      handleGameState(state, canvas, ctx, initialized);
+      if(!initialized){
+        initialized = true;
+      } 
       setCurrentPlayerHealth(state.players[0].health / 100);
       setCurrentEnemyHealth(state.players[1].health / 100);
       setTime(state.timeLeft);
@@ -96,6 +100,7 @@ const Game = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include"
       }).then((res) => {
         if (!res.ok) {
           // if (res.status === 400) {
@@ -132,17 +137,6 @@ const Game = () => {
     };
   }, [socket, gameCode, load]);
 
-  // useEffect(() => {
-  //   socket.on("updatePlayerNames", handleUpdateUsers);
-  
-  //   return () => {
-  //     socket.off("gameSnapShot", handleGameSnapShot);
-  //     socket.off("init", handleInit);
-  //     socket.off("gameInProgress", handleGameInProgress);
-  //     socket.off("gameEnded", handleGameEnd);
-  //   };
-  // }, [])
-  
   const handleKeyDown = (e) => {
     console.log("a");
     socket.emit("keyDown", e.key);

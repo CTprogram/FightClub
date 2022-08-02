@@ -23,7 +23,7 @@ const HomePage = (props) => {
     <div className={styles.wrapper}>
       <div className={styles.gamePlay}>
         {room && <Room cancelPlayHandler={cancelPlayHandler} />}
-        <div className={styles.gamePlayText}>Ready to play for your life ?</div>
+        <div className={styles.gamePlayText}>Ready to play for glory?</div>
         <motion.div 
           className={styles.gamePlayButton} 
           onClick={onPlayHandler}

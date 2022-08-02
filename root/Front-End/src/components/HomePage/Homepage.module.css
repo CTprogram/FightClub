@@ -14,9 +14,9 @@
 .gamePlayText {
   margin-left: 30px;
   margin-bottom: 8px;
-  font-size: 30px;
+  font-size: 44px;
   color: white;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .gamePlayButton {
@@ -25,7 +25,7 @@
   background-color: #66d9e8; 
   border-radius: 10px;
   padding: 5px;
-  width: 50px;
+  width: 60px;
   color: #6741d9;
   font-weight: 800;
   text-align: center;

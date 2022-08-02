@@ -194,7 +194,7 @@ function startGame(state, roomId) {
         }, DEATH_DELAY);
         gameOverFlag = true;
       }
-
+      
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     }
   }, 1000 / FRAME_RATE);

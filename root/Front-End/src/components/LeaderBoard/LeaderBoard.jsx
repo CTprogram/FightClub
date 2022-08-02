@@ -20,7 +20,7 @@ function LeaderBoard() {
       <div className={styles.title}>LEADERBOARD</div>
       <div className={styles.rows}>
         <LoaderBoardRow playerInfo={{ player: "Name", games: "Games", wins: "Wins", losses: "Losses", score: "Score" }} delay={0} isTitle={true} />
-        {leaderBoardRecords.map((record, index) => (
+        {leaderBoardRecords && leaderBoardRecords.map((record, index) => (
           <LoaderBoardRow key={index} playerInfo={record} delay={(index + 1) / 10} position={index + 1} />
         ))}
       </div>
