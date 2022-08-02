@@ -13,9 +13,11 @@ import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
 import { getExpressBaseURI } from "../../utils/constants";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useToasts } from 'react-toast-notifications';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { addToast } = useToasts();
 
   const onSuccess = () => {
     navigate("/login");
@@ -54,15 +56,17 @@ const SignUp = () => {
 
     if (response.status === 201) {
       onSuccess();
+      addToast('SignUp in Successfully', { appearance: 'success', autoDismiss: true });
       document.getElementById("register-form").reset();
     } else if (response.status === 409) {
       if (responseData.error.includes("username")) {
         //username is taken
+        addToast('Username is already taken', { appearance: 'error', autoDismiss: true });
       } else {
-        //email is taken
+        addToast('Email is already in use', { appearance: 'error', autoDismiss: true });
       }
     } else if (response.status === 500) {
-      console.log("Server error");
+
     } else {
       //unknown error
     }
