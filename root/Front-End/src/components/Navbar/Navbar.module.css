@@ -65,18 +65,29 @@
   height: auto;
   transition: transform 0.7s ease-in-out;
 }
+
 .logo:hover {
   transform: rotate(360deg);
 }
 
 .menu {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 .menu__item {
   font-size: 24px;
 }
 
+.menu__logout {
+  border: 2px inset #66d9e8;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 .menu__logout:hover {
   cursor: pointer;
+  border: 2px inset#6741d9;
+  background-color: #66d9e8;
+  color: #6741d9;
 }

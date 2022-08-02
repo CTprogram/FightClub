@@ -11,6 +11,8 @@ import Waiting from "./gameUI/waiting-animation/Waiting";
 import image from "../../assets/kenji/Idle.png";
 import { useToasts } from 'react-toast-notifications';
 import { getExpressBaseURI } from "../../utils/constants";
+import { motion } from "framer-motion";
+import GameEnd from "./gameEnd/GameEnd";
 
 const Game = () => {
   const canvasRef = useRef(null);
@@ -24,9 +26,10 @@ const Game = () => {
   const [gameCode, setGameCode] = useState("");
   const [playerOne, setPlayerOne] = useState(null);
   const [playerTwo, setPlayerTwo] = useState(null);
-  const [gameOver, setgameOver] = useState(false)
+  const [gameOver, setgameOver] = useState(null)
   const [currentPlayerRole, setcurrentPlayerRole] = useState(null);
   const [time, setTime] = useState(0);
+  const [playerNames, setplayerNames] = useState([]);
   const ctx = React.useContext(myContext);
   const user = ctx.userObject;
 
@@ -75,7 +78,12 @@ const Game = () => {
     setcurrentPlayerRole(2);
   }, [currentPlayerRole]);
 
+  const handleUpdateUsers = useCallback((users) => {
+    setplayerNames(users);
+  }, [playerNames]);
+
   const handleGameEnd = (winner, state) => {
+      setgameOver(winner);
       const body = {
         player : user.username,
         playerHealth : state.players[currentPlayerRole - 1].health,
@@ -100,7 +108,6 @@ const Game = () => {
           console.log('not ok');
         }
       });
-      console.log(body);
   };
 
   useEffect(() => {
@@ -114,15 +121,28 @@ const Game = () => {
     socket.on("gameInProgress", handleGameInProgress);
     socket.on("gameEnded", handleGameEnd);
     socket.on("joinedGame", handleJoinedGame);
+    socket.on("updatePlayerNames", handleUpdateUsers);
 
     return () => {
       socket.off("gameSnapShot", handleGameSnapShot);
       socket.off("init", handleInit);
       socket.off("gameInProgress", handleGameInProgress);
       socket.off("gameEnded", handleGameEnd);
+      socket.off("updatePlayerNames", handleUpdateUsers);
     };
   }, [socket, gameCode, load]);
 
+  // useEffect(() => {
+  //   socket.on("updatePlayerNames", handleUpdateUsers);
+  
+  //   return () => {
+  //     socket.off("gameSnapShot", handleGameSnapShot);
+  //     socket.off("init", handleInit);
+  //     socket.off("gameInProgress", handleGameInProgress);
+  //     socket.off("gameEnded", handleGameEnd);
+  //   };
+  // }, [])
+  
   const handleKeyDown = (e) => {
     console.log("a");
     socket.emit("keyDown", e.key);
@@ -134,19 +154,32 @@ const Game = () => {
 
   return (
     <div className={styles.wrapper}>
-      <p>Current role: {currentPlayerRole}</p>
       <div className={styles.gameScreen} style={canvasRef.current && { width: canvasRef.current.width }}>
         <canvas className={styles.myCanvas} tabIndex={0} autoFocus ref={canvasRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
         {load && (
           <div className={styles.overlay}>
-            <HealthBar width={canvasWidth / 3} healthRatio={currentPlayerHealth} playerNum={1} />
-            <h1 className={styles.timer}>{formatTime(time)}</h1>
-            <HealthBar width={canvasWidth / 3} healthRatio={currentEnemyHealth} playerNum={2} />
+            <HealthBar width={canvasWidth / 3} healthRatio={currentPlayerHealth} displacement={-50} player={{role: 1, name: playerNames[0]}} />
+            <motion.h1  
+              className={styles.timer}
+              initial={{ scale: 1 }}
+              animate={{ scale: 0.8, backgroundColor: "red" }}
+              transition={{
+                duration: 1,
+                repeat: 10,
+                delay: 80,
+              }}
+            >{formatTime(time)}</motion.h1>
+            <HealthBar width={canvasWidth / 3} healthRatio={currentEnemyHealth}  displacement={50} player={{role: 2, name: playerNames[1]}} />
           </div>
         )}
         {loading && (
           <div className={styles.waiting}>
             <Waiting loading={!load} code={gameCode} />
+          </div>
+        )}
+        {gameOver &&(
+          <div className={styles.waiting}>
+            <GameEnd decision={gameOver} playerRole={currentPlayerRole}/>
           </div>
         )}
       </div>

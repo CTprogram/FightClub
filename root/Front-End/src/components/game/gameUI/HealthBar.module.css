@@ -1,4 +1,5 @@
 .healthBar__outer {
+  background-image: url('../../../assets/kenji-avatar.png');
   background-color: rgb(255, 0, 0);
   border-radius: 0.5rem;
   display: flex;
@@ -8,6 +9,10 @@
 
 .healthBar__outer__enemy {
   justify-content: flex-end;
+}
+
+.usernames {
+  
 }
 
 .healthBar__inner {
@@ -22,11 +27,17 @@
   display: flex;
   flex-direction: column;
 }
+
 .flexBox {
   width: 100%;
   display: flex;
   justify-content: flex-end;
 }
+
+.flexReverse {
+  flex-direction: row-reverse;
+}
+
 .wrappingProfile {
   display: flex;
   align-items: center;
@@ -34,5 +45,5 @@
 }
 
 .avatar {
-  margin-right: 5px;
+  margin: 0  5px;
 }

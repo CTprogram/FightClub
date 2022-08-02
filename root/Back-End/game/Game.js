@@ -57,7 +57,7 @@ function initNewGameState() {
                 isDying: false
             }
         ],
-        timeLeft: 600
+        timeLeft: 90
     }
 }
 

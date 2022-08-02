@@ -3,8 +3,35 @@
 }
 
 .gamePlay {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   flex: 0.45;
   border: 1px solid green;
+}
+
+.gamePlayText {
+  margin-left: 30px;
+  margin-bottom: 8px;
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+}
+
+.gamePlayButton {
+  margin-left: 30px;
+  border: 4px inset #6741d9;
+  background-color: #66d9e8; 
+  border-radius: 10px;
+  padding: 5px;
+  width: 50px;
+  color: #6741d9;
+  font-weight: 800;
+  text-align: center;
+}
+
+.gamePlayButton:hover {
+  cursor: pointer; 
 }
 
 .leaderBoardSpace {

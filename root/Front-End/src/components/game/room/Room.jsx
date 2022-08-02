@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
+import { myContext } from "../../../utils/context";
 
 const Backdrop = (props) => {
   return <div className={styles.backdrop} onClick={props.cancelPlayHandler} />;
@@ -15,22 +16,28 @@ const RoomOverlay = (props) => {
   let navigate = useNavigate();
   const socket = useContext(SocketContext);
   const [code, setCode] = useState("asdasds");
+  const ctx = React.useContext(myContext);
+  const user = ctx.userObject;
+
   const createGame = () => {
-    socket.emit("createdRoom");
+    socket.emit("createdRoom", user.username);
     navigate("/game");
   };
 
   const joinRoom = () => {
-    socket.emit("joinRoom", code);
+    socket.emit("joinRoom", code, user.username);
     navigate("/game");
   };
+
   const joinRandom = () => {
-    socket.emit("joinRandom");
+    socket.emit("joinPublicRoom", user.username);
     navigate("/game");
   };
+
   const handleCodeChange = (e) => {
     setCode(e.target.value);
   };
+
   return (
     <Card className={styles.modal}>
       <Card className={styles.container}>

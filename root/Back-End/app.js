@@ -71,9 +71,12 @@ app.use(passport.session());
 app.use("/api/user/", userRoutes);
 app.use("/auth/", oAuthRoutes);
 app.use("/api/leaderboard/", leaderboardRoutes);
-//Socket Maps
+
+//Socket look up tables Maps
 const clientToRoom = {};
+const roomToUsers = {};
 const roomToState = {};
+const publicRoomIds = [];
 
 io.on("connection", (client) => {
   console.log("Client id:", client.id);
@@ -82,18 +85,30 @@ io.on("connection", (client) => {
   client.on("keyUp", keyUp);
   client.on("createdRoom", createRoom);
   client.on("joinRoom", joinRoom);
+  client.on("joinPublicRoom", joinPublicRoom);
 
-  function createRoom() {
+  function joinPublicRoom(username) {
+    if(publicRoomIds.length > 0) {
+      const publicRoomId = publicRoomIds.shift();
+      joinRoom(publicRoomId, username);
+    } else {
+      createRoom(username, true);
+    }
+  }
+
+  function createRoom(username, isPublicRoom = false) {
     const roomId = makeid(10);
     const state = initNewGameState();
     client.join(roomId);
     client.role = 1;
     clientToRoom[client.id] = roomId;
     roomToState[roomId] = state;
+    roomToUsers[roomId] = [username];
+    if(isPublicRoom) publicRoomIds.push(roomId);
     client.emit("init", roomId);
   }
 
-  function joinRoom(roomId) {
+  function joinRoom(roomId, username) {
     const room = io.sockets.adapter.rooms.get(roomId);
 
     if (room) {
@@ -104,7 +119,9 @@ io.on("connection", (client) => {
         client.role = 2;
         clientToRoom[client.id] = roomId;
         const roomState = roomToState[roomId];
+        roomToUsers[roomId].push(username);
         client.emit("joinedGame");
+        io.sockets.in(roomId).emit("updatePlayerNames", roomToUsers[roomId]);
         if (roomState) startGame(roomState, roomId);
       } else if (numOfUsers > 1) {
         client.emit("gameInProgress", roomId);
