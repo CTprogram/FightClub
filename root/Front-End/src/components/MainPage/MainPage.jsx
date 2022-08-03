@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
+import React from "react";
 import styles from "./MainPage.module.css";
 import { Link, Outlet } from "react-router-dom";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, PerspectiveCamera } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+
 import { OrbitControls } from "@react-three/drei";
-import Ninja from "./Ninja.jsx";
+
 import NinjaAnim from "./NinjaAnim";
 import { motion } from "framer-motion";
 // function Chair(props) {

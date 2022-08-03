@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
 import styles from "./SignUp.module.css";
 import { useForm } from "react-hook-form";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
 import { getExpressBaseURI } from "../../utils/constants";
 import { Link, Outlet, useNavigate } from "react-router-dom";
