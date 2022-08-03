@@ -89,6 +89,7 @@ const ForgotPassword = () => {
               </button>
           </Link>
 
+          <Link to="/resetPassword" className={styles.link}>Already have a Reset Code?</Link>
         </form>
       </Card>
     </div>
