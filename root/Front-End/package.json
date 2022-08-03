@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "MAX_OLD_SPACE_SIZE=8092 vite build",
+    "build": "MAX_OLD_SPACE_SIZE=2048 GENERATE_SOURCEMAP=false vite build",
     "preview": "vite preview"
   },
   "dependencies": {
