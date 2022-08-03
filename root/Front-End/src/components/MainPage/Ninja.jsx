@@ -7,7 +7,7 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 
 export default function Ninja(props) {
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF("/Ninja.glb");
+  const { nodes, materials, animations } = useGLTF("../../assets/Ninja.glb");
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = "mongodb+srv://admin3:X4uYaOWllwAHo24E@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+const conn = "mongodb://mongo:27017/game";
 
 mongoose.connect(
   conn,
@@ -48,7 +48,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: { maxAge: new Date(Date.now() + 360000) },
+    cookie: { maxAge: 60 * 60 * 24 * 7 * 100 },
   })
 );
 
