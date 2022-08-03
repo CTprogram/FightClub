@@ -21,7 +21,6 @@ passport.use(
     },
 
     function (request, accessToken, refreshToken, profile, done) {
-      console.log(profile);
       user.findOne({ googleId: profile.id }, async (err, doc) => {
         if (err) {
           return done(err, null);

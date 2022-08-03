@@ -1,14 +1,8 @@
-import React, {
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-  useState,
-} from "react";
+import React from "react";
 import styles from "./ForgotPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getExpressBaseURI } from "../../utils/constants";
 import { useToasts } from 'react-toast-notifications';
 

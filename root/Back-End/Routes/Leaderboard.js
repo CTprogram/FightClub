@@ -10,6 +10,7 @@ router.post("/records/", authMiddleware, function (req, res, next) {
             ['Leaderboard entry must containing player, playerHealth, and decision']
         });
     }
+    
     //Acquire game decision
     let player, playerHealth, gameDecision, isWinner;
     playerHealth =req.body.playerHealth;

@@ -1,14 +1,10 @@
 import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { io } from "socket.io-client";
 import { myContext } from "../../utils/context";
 import { handleGameState } from "../../utils/gameUtils";
-import { Sprite, Fighter } from "../../utils/gameUtils";
 import { SocketContext } from "../../utils/socket";
 import styles from "./Game.module.css";
 import HealthBar from "./gameUI/HealthBar";
 import Waiting from "./gameUI/waiting-animation/Waiting";
-import image from "../../assets/kenji/Idle.png";
 import { useToasts } from 'react-toast-notifications';
 import { getExpressBaseURI } from "../../utils/constants";
 import { motion } from "framer-motion";
@@ -75,7 +71,6 @@ const Game = () => {
   }, []);
 
   const handleGameInProgress = useCallback((roomId) => {
-    //setcurrentPlayerRole(2);
   }, []);
 
   const handleJoinedGame = useCallback(() => {
@@ -103,14 +98,7 @@ const Game = () => {
         credentials: "include"
       }).then((res) => {
         if (!res.ok) {
-          // if (res.status === 400) {
-          //   throw new Error("Cannot signup without username or password.");
-          // } else if (res.status === 409) {
-          //   throw new Error("Username is already taken.");
-          // } else {
-          //   throw new Error(res.statusText);
-          // }
-          console.log('not ok');
+          addToast('Could not save results to leaderboard', { appearance: 'error', autoDismiss: true });
         }
       });
   };

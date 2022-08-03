@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
+import React, { useContext } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
-
 import Card from "../UI/Card";
-
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { myContext } from "../../utils/context";
 import { getExpressBaseURI } from "../../utils/constants";
 import { useToasts } from 'react-toast-notifications';
@@ -30,7 +28,7 @@ const Login = () => {
     formData.append("username", data.username);
     formData.append("password", data.password);
 
-    // convert formData to JSON since that is what the server looks for
+    //Convert formData to JSON since that is what the server looks for
     var object = {};
     formData.forEach(function (value, key) {
       object[key] = value;
@@ -49,7 +47,6 @@ const Login = () => {
     console.log(responseData);
 
     if (response.status === 200) {
-      //on successful login do something
       onSuccess();
       addToast('Logged in Successfully', { appearance: 'success', autoDismiss: true });
       document.getElementById("login-form").reset();

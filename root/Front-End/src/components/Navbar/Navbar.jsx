@@ -9,14 +9,6 @@ const Navbar = (props) => {
   const ctx = useContext(myContext);
   const user = ctx.userObject;
 
-  const openUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const closeUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   const userLogout = async () => {
     console.log("hello");
     const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, { credentials: "include"}) 

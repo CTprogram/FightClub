@@ -1,7 +1,5 @@
 
 import * as React from "react";
-
-
 import Navbar from "./components/Navbar/Navbar";
 import { socket, SocketContext } from "./utils/socket";
 import { BrowserRouter, Route, Routes } from "react-router-dom";

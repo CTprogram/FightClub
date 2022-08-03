@@ -27,9 +27,11 @@ router.post("/register/", function (req, res, next) {
       mandatory: missingFields,
     });
   }
+
   var username = sanitize(req.body.username);
   var password = sanitize(req.body.password);
   var email = sanitize(req.body.email);
+
   user.find(
     { $or: [{ email: email }, { username: username }] },
     function (err, userDoc) {
@@ -48,6 +50,7 @@ router.post("/register/", function (req, res, next) {
         }
       }
 
+      //Verify Password
       bcrypt.genSalt(10, function (err, salt) {
         if (err) return res.status(500).json({ error: err });
 
@@ -100,8 +103,10 @@ router.post("/login/", function (req, res, next) {
       mandatory: missingFields,
     });
   }
+
   var username = sanitize(req.body.username);
   var password = sanitize(req.body.password);
+
   user.findOne({ username: username }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
     if (!userDoc) return res.status(401).json({ err: "Invalid username" });
@@ -125,18 +130,6 @@ router.post("/login/", function (req, res, next) {
   });
 });
 
-router.post("/logout/", function (req, res, next) {
-  if (req.user || req.session.username) {
-    req.session.username = "";
-    req.user = {};
-    req.session.destroy();
-    res.clearCookie("connect.sid");
-    return res.status(200).json({ message: "Succesfully logged out" });
-  } else {
-    return res.status(200).json({ message: "Not logged in" });
-  }
-});
-
 router.put("/resetPassword/", function (req, res, next) {
   if (!req.body.email) {
     res.status(400).json({
@@ -158,6 +151,7 @@ router.put("/resetPassword/", function (req, res, next) {
 
   var email = sanitize(req.body.email);
   var password = sanitize(req.body.password);
+
   user.findOne({ email: email }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
     if (!userDoc) return res.status(401).json({ error: "Invalid email" });
@@ -206,6 +200,7 @@ router.put("/forgotPassword/", function (req, res, next) {
       error: "Invalid Email",
     });
   }
+  
   user.findOne({ email: req.body.email }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
     if (!userDoc) return res.status(401).json({ error: "Invalid email" });
@@ -216,6 +211,7 @@ router.put("/forgotPassword/", function (req, res, next) {
       email: req.body.email,
       resetCode: code,
     });
+
     resetPwdItem
       .save()
       .then(() => {

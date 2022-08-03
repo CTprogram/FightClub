@@ -1,10 +1,10 @@
 import styles from "./HealthBar.module.css";
 import { myContext } from "../../../utils/context";
-import { CardHeader, Avatar } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import kenjiAvatar from '../../../assets/kenji-avatar.png';
 import kingAvatar from '../../../assets/king-avatar.png';
-import React, { useContext } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 const HealthBar = (props) => {

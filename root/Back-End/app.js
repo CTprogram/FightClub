@@ -6,14 +6,11 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
-
 const userRoutes = require("./Routes/UserRoutes");
 const oAuthRoutes = require("./Routes/OAuthRoutes");
 const leaderboardRoutes = require("./Routes/Leaderboard");
-//Middleware to parse
 const httpServer = require("http").Server(app);
 const io = require("socket.io")(httpServer, { cors: "*", path: '/mysocket'});
-
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
@@ -66,9 +63,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+//Passport
 app.use(passport.initialize());
 app.use(passport.session());
-//Middleware
+
+//Express Routes
 app.use("/api/user/", userRoutes);
 app.use("/auth/", oAuthRoutes);
 app.use("/api/leaderboard/", leaderboardRoutes);
@@ -139,19 +138,19 @@ io.on("connection", (client) => {
     const state = roomToState[roomId];
     if (!state.players[client.role - 1].isDying) {
       switch (key) {
-        case "a":
+        case "a": //LEFT
           state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
           break;
-        case "d":
+        case "d": //RIGHT
           state.players[client.role - 1].velocity.x = CHARACTER_HORIZONTAL_SPEED;
           break;
-        case "w":
+        case "w": //ATTACK
           if (state.players[client.role - 1].onGround) {
             state.players[client.role - 1].velocity.y = CHARACTER_JUMP_OFFSET;
             state.players[client.role - 1].onGround = false;
           }
           break;
-        case "s":
+        case "s": //JUMP
           const settings = client.role === 1 ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 } : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
           if (!state.players[client.role - 1].attacking) {
             state.players[client.role - 1].attacking = true;
@@ -185,7 +184,6 @@ function startGame(state, roomId) {
     const decision = gameLoop(state);
 
     if (!decision) {
-      console.log(JSON.stringify(state));
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
       if (!gameOverFlag) {

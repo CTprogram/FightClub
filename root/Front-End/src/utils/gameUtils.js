@@ -43,12 +43,9 @@ class Sprite {
       (this.image.width / this.framesMax) * this.scale,
       this.image.height * this.scale
     );
-    // if (this.attacking) {
-    //   this.ctx.fillStyle = "green";
-    //   this.ctx.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-    // }
   }
 
+  //Loop through invidual frame of player sprite images
   goThroughFrames(halt = false) {
     this.framesElapsed++;
     if (this.framesElapsed % this.framesHold === 0) {
@@ -66,16 +63,8 @@ class Sprite {
 }
 
 class Fighter extends Sprite {
-  // constructor({ position, velocity, attackBox, attacking }, ctx) {
-  //   this.position = position;
-  //   this.velocity = velocity;
-  //   this.attackBox = attackBox;
-  //   this.attacking = attacking;
-  //   this.ctx = ctx;
-  // }
   constructor({ position, velocity, attackBox, attacking }, offset, sprites, ctx, imgSrc, scale = 1, framesMax = 1) {
     super(position, imgSrc, scale, framesMax, offset, ctx);
-
     this.velocity = velocity;
     this.width = 50;
     this.height = 50;
@@ -92,6 +81,7 @@ class Fighter extends Sprite {
       sprites[sprite].image.src = sprites[sprite].imgSrc;
     }
   }
+
   switchSprite(sprite) {
     switch (sprite) {
       case "idle":
@@ -189,6 +179,7 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
       ctx
     );
   }
+
   playerOne.position = gameState.players[0].position;
   playerOne.velocity = gameState.players[0].velocity;
   playerOne.attackBox = gameState.players[0].attackBox;
@@ -200,6 +191,7 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
   playerTwo.attacking = gameState.players[1].attacking;
   playerTwo.isDying = gameState.players[1].isDying;
 
+  //Player one sprite switch up
   if(!playerOne.isDying) {
     if(playerOne.attacking) {
       console.log('attacking');
@@ -225,7 +217,7 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
     playerOne.switchSprite("death");
   }
 
-
+  //Player two sprite switch up
   if(!playerTwo.isDying) {
     if(playerTwo.attacking){
       playerTwo.switchSprite("attack1");
@@ -246,29 +238,17 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
     playerTwo.switchSprite("death");
   }
 
-  // gameState = JSON.parse(gameState);
   requestAnimationFrame(() => paintGame(gameState, canvas, playerOne, playerTwo, ctx, background));
 };
 
 const paintGame = (state, canvas, playerOne, playerTwo, ctx) => {
   ctx.fillStyle = BG_COLOUR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // const player = new Sprite(state.players[0], ctx);
-  // const enemy = new Sprite(state.players[1], ctx);
-  // player.draw();
-  // enemy.draw();
   ctx.globalAlpha = 0.3;
   background.update();
-
   ctx.globalAlpha = 1;
   playerOne.update();
-
-  // ctx.fillStyle = "blue";
-  // ctx.fillRect(state.players[1].position.x, state.players[1].position.y, state.players[1].width, state.players[1].height);
-  // if(playerTwo.attacking) {
-  //   ctx.fillStyle = "green";
-  //   ctx.fillRect(state.players[1].attackBox.position.x, state.players[1].attackBox.position.y, state.players[1].attackBox.width, state.players[1].attackBox.height);
-  // }
   playerTwo.update();
 };
+
 export { handleGameState, Sprite, Fighter };

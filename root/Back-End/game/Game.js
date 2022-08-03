@@ -1,6 +1,7 @@
 const e = require("express");
 const { GAME_SCREEN_HEIGHT, GRAVITY, GROUND_OFFSET, ENEMY_GROUND_OFFSET, PLAYER_GROUND_OFFSET } = require("../utils/constants");
 
+//Makes a game board with initial game properties.
 function initNewGameState() {
     return {
         players : [
@@ -68,16 +69,19 @@ function gameLoop(state) {
     const enemy = state.players[1];
     let winner;
 
+    //Players movement
     player.position.x += player.velocity.x;
     player.position.y += player.velocity.y;
     enemy.position.x += enemy.velocity.x;
     enemy.position.y += enemy.velocity.y;
 
+    //Attack Box Movement
     player.attackBox.position.x = player.position.x - player.attackBox.offset;
     player.attackBox.position.y = player.position.y;
     enemy.attackBox.position.x = enemy.position.x - enemy.attackBox.offset;
     enemy.attackBox.position.y = enemy.position.y;
 
+    //Game boundaries
     if (player.position.y + player.height + player.velocity.y + PLAYER_GROUND_OFFSET >= GAME_SCREEN_HEIGHT) {
         player.onGround = true;
         player.velocity.y = 0;
@@ -92,15 +96,16 @@ function gameLoop(state) {
         enemy.velocity.y += GRAVITY;
     }
 
+    //Collision
     if (successfulAttack({ attacker: player, attacked: enemy })) {
         enemy.health -= 10 / 14.5;
     }
 
-        if(successfulAttack({attacker: enemy, attacked: player})) {
-            player.health -= 10 / 8.5;
-        }
+    if(successfulAttack({attacker: enemy, attacked: player})) {
+        player.health -= 10 / 8.5;
+    }
         
-        return getWinner(player, enemy, state.timeLeft);
+    return getWinner(player, enemy, state.timeLeft);
 }
 
 function successfulAttack({ attacker, attacked }) {

@@ -26,6 +26,7 @@ function CopyDialog({ text }) {
       if (navigator.clipboard && window.isSecureContext) {
           return navigator.clipboard.writeText(textToCopy);
       } else {
+          //Create an invisible box to copy text from.
           let textArea = document.createElement("textarea");
           textArea.value = textToCopy;
           textArea.style.position = "fixed";
@@ -41,12 +42,23 @@ function CopyDialog({ text }) {
       }
   }
 
+  const copyClicked = () => {
+      copyToClipboard(text)
+      .then(() => {
+        setCopied(true);
+        setOpen(true);
+      })
+      .catch(() => {
+        setCopied(false);
+      });
+  };
+
   return (
     <div>
       <div className={styles.wrapper}>
         <div>Game Code: </div>
         <div className={styles.text}>{text}</div>
-        <div className={styles.icon} onClick={copyToClipboard}>
+        <div className={styles.icon} onClick={copyClicked}>
           {copied ? <CheckCircleIcon /> : <ContentCopyIcon />}
         </div>
       </div>

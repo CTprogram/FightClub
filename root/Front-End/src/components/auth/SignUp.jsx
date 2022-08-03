@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
+import React from "react";
 import styles from "./SignUp.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { getExpressBaseURI } from "../../utils/constants";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
 
 const SignUp = () => {
@@ -20,15 +20,13 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  //Will be used for Login
-
   const onSubmitRegister = async (data) => {
     var formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
     formData.append("email", data.email);
 
-    // convert formData to JSON since that is what the server looks for
+    // Convert formData to JSON since that is what the server looks for
     var object = {};
     formData.forEach(function (value, key) {
       object[key] = value;
@@ -57,13 +55,10 @@ const SignUp = () => {
         addToast('Email is already in use', { appearance: 'error', autoDismiss: true });
       }
     } else if (response.status === 500) {
-
+      addToast('Server Error occured while trying to sign up', { appearance: 'error', autoDismiss: true });
     } else {
-      //unknown error
+      addToast('Could not sign up', { appearance: 'error', autoDismiss: true });
     }
-
-    // We want to reload after successful query to display logged in screen
-    // window.location.reload();
   };
 
   return (
