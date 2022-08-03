@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "MAX_OLD_SPACE_SIZE=4096 vite build",
     "preview": "vite preview"
   },
   "dependencies": {
