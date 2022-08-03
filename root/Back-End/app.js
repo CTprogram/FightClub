@@ -12,7 +12,8 @@ const oAuthRoutes = require("./Routes/OAuthRoutes");
 const leaderboardRoutes = require("./Routes/Leaderboard");
 //Middleware to parse
 const httpServer = require("http").Server(app);
-const io = require("socket.io")(httpServer, { cors: "*" });
+const io = require("socket.io")(httpServer, { cors: "*", path: '/mysocket'});
+
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
