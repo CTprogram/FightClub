@@ -220,11 +220,11 @@ router.put("/forgotPassword/", function (req, res, next) {
       .save()
       .then(() => {
         let emailOptions = {
-          from: "CSCC09fightclub@hotmail.com",
+          from: "treyarchc09@hotmail.com",
           to: req.body.email,
-          subject: "Fight Club password recovery",
+          subject: "Fight Club password reset",
           text:
-            "Your follow password recovery code is " +
+            "Your follow password reset code is " +
             code +
             ". Code Expires in 15 minutes",
         };

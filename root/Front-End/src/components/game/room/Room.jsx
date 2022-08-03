@@ -3,10 +3,11 @@ import { Button, Stack, TextField } from "@mui/material";
 import Card from "../../UI/Card";
 import { SocketContext } from "../../../utils/socket";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { myContext } from "../../../utils/context";
+import { useToasts } from 'react-toast-notifications';
 
 const Backdrop = (props) => {
   return <div className={styles.backdrop} onClick={props.cancelPlayHandler} />;
@@ -18,6 +19,7 @@ const RoomOverlay = (props) => {
   const [code, setCode] = useState("asdasds");
   const ctx = React.useContext(myContext);
   const user = ctx.userObject;
+  const { addToast } = useToasts();
 
   const createGame = () => {
     socket.emit("createdRoom", user.username);
@@ -37,6 +39,21 @@ const RoomOverlay = (props) => {
   const handleCodeChange = (e) => {
     setCode(e.target.value);
   };
+
+  const handleGameInProgress = () => {
+    addToast('Room has game in progress', { appearance: 'error', autoDismiss: true });
+    navigate("/home");
+  }
+
+  const handleInvalidRoom = () => {
+    addToast('Invalid room code', { appearance: 'error', autoDismiss: true });
+    navigate("/home");
+  }
+
+  useEffect(() => {
+    socket.once("gameInProgress", handleGameInProgress);
+    socket.once("invalidRoom", handleInvalidRoom);
+  }, []);
 
   return (
     <Card className={styles.modal}>

@@ -29,7 +29,7 @@ const Navbar = (props) => {
   return (
     <div className={styles.container}>
       <div>
-        <Link to="/">
+        <Link to={user && user.username ? "/home" : "/"}>
           {" "}
           <img className={styles.logo} src={logo} />{" "}
         </Link>

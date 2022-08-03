@@ -21,17 +21,25 @@ function CopyDialog({ text }) {
     setOpen(false);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setCopied(true);
-        setOpen(true);
-      })
-      .catch(() => {
-        setCopied(false);
-      });
-  };
+  //Reference: https://stackoverflow.com/questions/51805395/navigator-clipboard-is-undefined
+  const copyToClipboard = (textToCopy) => {
+      if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(textToCopy);
+      } else {
+          let textArea = document.createElement("textarea");
+          textArea.value = textToCopy;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          return new Promise((res, rej) => {
+              document.execCommand('copy') ? res() : rej();
+              textArea.remove();
+          });
+      }
+  }
 
   return (
     <div>

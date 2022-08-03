@@ -9,12 +9,8 @@ class Character {
         this.attacking = false;
         this.health = 100;
     }
+}
 
-    attack() {
-
-    }
-
-    updatePosition() {
-
-    }
+module.exports = {
+    Character
 }
