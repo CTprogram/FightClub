@@ -1,31 +1,33 @@
-version: '3'
+version: "3"
 services:
-  api:
-    container_name: api-container
-    image: ghcr.io/khanm253/express-env-1:latest
-    expose:
-      - "3001"
-    ports: 
-      - "3001:3001"
-    depends_on:
-      - mongo
-  client:
-    container_name: client-container
-    image: ghcr.io/khanm253/client-env-3:latest 
-    expose:
-      - "3000"
-    ports:
-      - "3000:3000"
+  mongo:
+    image: "mongo"
+  nginx:
+    image: nginx:1.22.0-alpine
+    container_name: nginx
+    restart: always
     depends_on:
       - api
-  mongo:
-    container_name: mongo-backend
-    image: mongo
-    expose:
-      - "27017"
-    ports:
-      - "27017:27017"
+      - client
     volumes:
-      - apidb:/data/apidb
-volumes:
-  apidb:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    ports:
+      # Host:Container
+      - "80:80"
+      - "443:443"
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: "./Back-End"
+    volumes:
+      - /app/node_modules
+      - ./Back-End:/app
+  client:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile
+      context: ./Front-End
+    volumes:
+      - /app/node_modules
+      - ./Front-End:/app

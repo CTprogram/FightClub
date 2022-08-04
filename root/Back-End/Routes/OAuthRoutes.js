@@ -14,14 +14,14 @@ passport.deserializeUser((user, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "969850809285-nv8oksir0hies132uu5d9vcljvkdt0je.apps.googleusercontent.com",
+      clientID:
+        "969850809285-nv8oksir0hies132uu5d9vcljvkdt0je.apps.googleusercontent.com",
       clientSecret: "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",
       callbackURL: "/auth/google/callback",
       passReqToCallback: true,
     },
 
     function (request, accessToken, refreshToken, profile, done) {
-      console.log(profile);
       user.findOne({ googleId: profile.id }, async (err, doc) => {
         if (err) {
           return done(err, null);
@@ -44,13 +44,16 @@ passport.use(
   )
 );
 
-router.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:3000/home",
-    failureRedirect: "http://localhost:3000/login",
+    successRedirect: "https://fight-club.tech/home",
+    failureRedirect: "https://fight-club.tech/login",
   })
 );
 

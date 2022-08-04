@@ -8,7 +8,9 @@ function LeaderBoard() {
   const [leaderBoardRecords, setleaderBoardRecords] = useState([]);
 
   useEffect(() => {
-    fetch(`${getExpressBaseURI()}/api/leaderboard/records`, { credentials: "include"})
+    fetch(`${getExpressBaseURI()}/api/leaderboard/records`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setleaderBoardRecords(data.result);
@@ -16,13 +18,34 @@ function LeaderBoard() {
   }, []);
 
   return (
-    <motion.div className={styles.board} initial={{ y: 100 }} animate={{ y: 0 }} transition={{ ease: "easeOut", duration: 2 }}>
+    <motion.div
+      className={styles.board}
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      transition={{ ease: "easeOut", duration: 2 }}
+    >
       <div className={styles.title}>LEADERBOARD</div>
       <div className={styles.rows}>
-        <LoaderBoardRow playerInfo={{ player: "Name", games: "Games", wins: "Wins", losses: "Losses", score: "Score" }} delay={0} isTitle={true} />
-        {leaderBoardRecords && leaderBoardRecords.map((record, index) => (
-          <LoaderBoardRow key={index} playerInfo={record} delay={(index + 1) / 10} position={index + 1} />
-        ))}
+        <LoaderBoardRow
+          playerInfo={{
+            player: "Name",
+            games: "Games",
+            wins: "Wins",
+            losses: "Losses",
+            score: "Score",
+          }}
+          delay={0}
+          isTitle={true}
+        />
+        {leaderBoardRecords &&
+          leaderBoardRecords.map((record, index) => (
+            <LoaderBoardRow
+              key={index}
+              playerInfo={record}
+              delay={(index + 1) / 10}
+              position={index + 1}
+            />
+          ))}
       </div>
     </motion.div>
   );

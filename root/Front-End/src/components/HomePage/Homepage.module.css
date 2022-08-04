@@ -22,7 +22,7 @@
 .gamePlayButton {
   margin-left: 30px;
   border: 4px inset #6741d9;
-  background-color: #66d9e8; 
+  background-color: #66d9e8;
   border-radius: 10px;
   padding: 5px;
   width: 60px;
@@ -32,7 +32,7 @@
 }
 
 .gamePlayButton:hover {
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .leaderBoardSpace {

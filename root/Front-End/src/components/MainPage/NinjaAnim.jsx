@@ -17,7 +17,12 @@ export default function NinjaAnim(props) {
       <group name="Scene">
         <group name="Armature" rotation={[Math.PI / 2, 0, -0.3]} scale={0.025}>
           <primitive object={nodes.mixamorigHips} />
-          <skinnedMesh name="Ch24" geometry={nodes.Ch24.geometry} material={materials["Ch24_Body.001"]} skeleton={nodes.Ch24.skeleton} />
+          <skinnedMesh
+            name="Ch24"
+            geometry={nodes.Ch24.geometry}
+            material={materials["Ch24_Body.001"]}
+            skeleton={nodes.Ch24.skeleton}
+          />
         </group>
       </group>
     </group>

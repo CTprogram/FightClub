@@ -14,7 +14,6 @@ export default function Context(props) {
     fetch(`${getExpressBaseURI()}/api/user/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.user) {
           setUserObject(data.user);
           setPending(false);
@@ -23,13 +22,16 @@ export default function Context(props) {
         }
       });
   });
-  
+
   useEffect(() => {
     if (pending) {
-      console.log("checking");
       handleCheckLogin();
     }
   }, [pending]);
 
-  return <myContext.Provider value={{ userObject, pending, startPending }}>{props.children}</myContext.Provider>;
+  return (
+    <myContext.Provider value={{ userObject, pending, startPending }}>
+      {props.children}
+    </myContext.Provider>
+  );
 }

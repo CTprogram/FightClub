@@ -13,7 +13,7 @@ spec:
   storageClassName: manual
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce 
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
@@ -28,6 +28,6 @@ spec:
   capacity:
     storage: 2Gi
   accessModes:
-    - ReadWriteOnce 
+    - ReadWriteOnce
   hostPath:
     path: "/data/db"

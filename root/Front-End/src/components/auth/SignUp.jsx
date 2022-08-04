@@ -1,19 +1,10 @@
-import React, { useEffect, useRef, useContext, useCallback, useState } from "react";
+import React from "react";
 import styles from "./SignUp.module.css";
 import { useForm } from "react-hook-form";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Card from "../UI/Card";
 import { getExpressBaseURI } from "../../utils/constants";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useToasts } from 'react-toast-notifications';
+import { Link, useNavigate } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -29,15 +20,13 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  //Will be used for Login
-
   const onSubmitRegister = async (data) => {
     var formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
     formData.append("email", data.email);
 
-    // convert formData to JSON since that is what the server looks for
+    // Convert formData to JSON since that is what the server looks for
     var object = {};
     formData.forEach(function (value, key) {
       object[key] = value;
@@ -56,40 +45,84 @@ const SignUp = () => {
 
     if (response.status === 201) {
       onSuccess();
-      addToast('SignUp in Successfully', { appearance: 'success', autoDismiss: true });
+      addToast("SignUp in Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      });
       document.getElementById("register-form").reset();
     } else if (response.status === 409) {
       if (responseData.error.includes("username")) {
         //username is taken
-        addToast('Username is already taken', { appearance: 'error', autoDismiss: true });
+        addToast("Username is already taken", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       } else {
-        addToast('Email is already in use', { appearance: 'error', autoDismiss: true });
+        addToast("Email is already in use", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       }
     } else if (response.status === 500) {
-
+      addToast("Server Error occured while trying to sign up", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     } else {
-      //unknown error
+      addToast("Could not sign up", { appearance: "error", autoDismiss: true });
     }
-
-    // We want to reload after successful query to display logged in screen
-    // window.location.reload();
   };
 
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
         <div className={styles.formTitle}>Sign Up</div>
-        <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
+        <form
+          id="register-form"
+          className={styles.formContainer}
+          onSubmit={handleSubmit(onSubmitRegister)}
+        >
           <div className={styles.formElementTitle}>Username</div>
-          <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
-          {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
+          <input
+            type="text"
+            id="registerUsername"
+            autoComplete="username"
+            {...register("username", { maxLength: 30 })}
+            className={styles.formElement}
+            placeholder="Enter a username"
+            required
+          />
+          {errors.name && errors.name.type === "maxLength" && (
+            <span>Max length exceeded</span>
+          )}
           <div className={styles.formElementTitle}>Password</div>
-          <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
+          <input
+            type="password"
+            id="registerPassword"
+            autoComplete="new-password"
+            {...register("password")}
+            className={styles.formElement}
+            placeholder="Enter a password"
+            required
+          />
 
           <div className={styles.formElementTitle}>Email</div>
-          <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
+          <input
+            type="email"
+            id="email"
+            {...register("email")}
+            autoComplete="email"
+            className={styles.formElement}
+            placeholder="Enter your Email"
+            required
+          />
 
-          <button type="submit" id="signup" name="action" className={styles.signBtn}>
+          <button
+            type="submit"
+            id="signup"
+            name="action"
+            className={styles.signBtn}
+          >
             Sign Up
           </button>
 

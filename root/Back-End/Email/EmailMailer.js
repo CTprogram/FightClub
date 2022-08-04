@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 var transporter = nodemailer.createTransport({
   service: "Hotmail",
   auth: {
-    user: "CSCC09fightclub@hotmail.com",
+    user: "treyarchc09@hotmail.com",
     pass: "FightclubCSCC09@123",
   },
 });

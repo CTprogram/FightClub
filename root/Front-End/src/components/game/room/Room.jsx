@@ -1,12 +1,13 @@
 import styles from "./Room.module.css";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import Card from "../../UI/Card";
 import { SocketContext } from "../../../utils/socket";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { myContext } from "../../../utils/context";
+import { useToasts } from "react-toast-notifications";
 
 const Backdrop = (props) => {
   return <div className={styles.backdrop} onClick={props.cancelPlayHandler} />;
@@ -18,6 +19,7 @@ const RoomOverlay = (props) => {
   const [code, setCode] = useState("asdasds");
   const ctx = React.useContext(myContext);
   const user = ctx.userObject;
+  const { addToast } = useToasts();
 
   const createGame = () => {
     socket.emit("createdRoom", user.username);
@@ -38,6 +40,24 @@ const RoomOverlay = (props) => {
     setCode(e.target.value);
   };
 
+  const handleGameInProgress = () => {
+    addToast("Room has game in progress", {
+      appearance: "error",
+      autoDismiss: true,
+    });
+    navigate("/home");
+  };
+
+  const handleInvalidRoom = () => {
+    addToast("Invalid room code", { appearance: "error", autoDismiss: true });
+    navigate("/home");
+  };
+
+  useEffect(() => {
+    socket.once("gameInProgress", handleGameInProgress);
+    socket.once("invalidRoom", handleInvalidRoom);
+  }, []);
+
   return (
     <Card className={styles.modal}>
       <Card className={styles.container}>
@@ -55,7 +75,13 @@ const RoomOverlay = (props) => {
           <h2>Join Room</h2>
         </header>
         <div className={styles.joinGame}>
-          <TextField onChange={handleCodeChange} value={code} id="outlined-basic" label="Room ID" variant="outlined" />
+          <TextField
+            onChange={handleCodeChange}
+            value={code}
+            id="outlined-basic"
+            label="Room ID"
+            variant="outlined"
+          />
           <Button onClick={joinRoom} variant="contained">
             Join
           </Button>
@@ -78,8 +104,14 @@ const RoomOverlay = (props) => {
 const Room = (props) => {
   return (
     <React.Fragment>
-      {ReactDOM.createPortal(<Backdrop cancelPlayHandler={props.cancelPlayHandler} />, document.getElementById("backdrop-root"))}
-      {ReactDOM.createPortal(<RoomOverlay />, document.getElementById("overlay-root"))}
+      {ReactDOM.createPortal(
+        <Backdrop cancelPlayHandler={props.cancelPlayHandler} />,
+        document.getElementById("backdrop-root")
+      )}
+      {ReactDOM.createPortal(
+        <RoomOverlay />,
+        document.getElementById("overlay-root")
+      )}
     </React.Fragment>
   );
 };

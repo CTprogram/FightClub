@@ -9,19 +9,11 @@ const Navbar = (props) => {
   const ctx = useContext(myContext);
   const user = ctx.userObject;
 
-  const openUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const closeUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   const userLogout = async () => {
-    console.log("hello");
-    const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, { credentials: "include"}) 
+    const response = await fetch(`${getExpressBaseURI()}/api/user/logout/`, {
+      credentials: "include",
+    });
     const responseData = await response.json();
-    console.log(responseData + "asasAS");
     ctx.startPending();
     window.location.assign("/");
   };
@@ -29,7 +21,7 @@ const Navbar = (props) => {
   return (
     <div className={styles.container}>
       <div>
-        <Link to="/">
+        <Link to={user && user.username ? "/home" : "/"}>
           {" "}
           <img className={styles.logo} src={logo} />{" "}
         </Link>
@@ -37,7 +29,10 @@ const Navbar = (props) => {
       {user && user.username && (
         <div className={styles.menu}>
           <h1 className={styles.menu__item}>{user.username}</h1>
-          <h1 className={`${styles.menu__item} ${styles.menu__logout}`} onClick={userLogout}>
+          <h1
+            className={`${styles.menu__item} ${styles.menu__logout}`}
+            onClick={userLogout}
+          >
             Logout
           </h1>
         </div>

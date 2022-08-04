@@ -21,9 +21,29 @@ function CopyDialog({ text }) {
     setOpen(false);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(text)
+  //Reference: https://stackoverflow.com/questions/51805395/navigator-clipboard-is-undefined
+  const copyToClipboard = (textToCopy) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(textToCopy);
+    } else {
+      //Create an invisible box to copy text from.
+      let textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+      });
+    }
+  };
+
+  const copyClicked = () => {
+    copyToClipboard(text)
       .then(() => {
         setCopied(true);
         setOpen(true);
@@ -38,16 +58,26 @@ function CopyDialog({ text }) {
       <div className={styles.wrapper}>
         <div>Game Code: </div>
         <div className={styles.text}>{text}</div>
-        <div className={styles.icon} onClick={copyToClipboard}>
+        <div className={styles.icon} onClick={copyClicked}>
           {copied ? <CheckCircleIcon /> : <ContentCopyIcon />}
         </div>
       </div>
-      <Snackbar style={{ position: "fixed", top: "350px", left: "100px" }} open={open && copied} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        style={{ position: "fixed", top: "350px", left: "100px" }}
+        open={open && copied}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Copied to Clipboard!
         </Alert>
       </Snackbar>
-      <Snackbar style={{ position: "fixed", top: "350px", left: "80px" }} open={open && !copied} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        style={{ position: "fixed", top: "350px", left: "80px" }}
+        open={open && !copied}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to copy to Clipboard!
         </Alert>

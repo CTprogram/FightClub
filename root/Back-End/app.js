@@ -6,22 +6,27 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
-
 const userRoutes = require("./Routes/UserRoutes");
 const oAuthRoutes = require("./Routes/OAuthRoutes");
 const leaderboardRoutes = require("./Routes/Leaderboard");
-//Middleware to parse
 const httpServer = require("http").Server(app);
-const io = require("socket.io")(httpServer, { cors: "*" });
+const io = require("socket.io")(httpServer, { cors: "*", path: "/mysocket" });
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initNewGameState, gameLoop } = require("./game/Game");
-const { FRAME_RATE, CHARACTER_HORIZONTAL_SPEED, CHARACTER_JUMP_OFFSET, PLAYER_ATTACK_FRAMES, ENEMY_ATTACK_FRAMES, DEATH_DELAY } = require("./utils/constants");
+const {
+  FRAME_RATE,
+  CHARACTER_HORIZONTAL_SPEED,
+  CHARACTER_JUMP_OFFSET,
+  PLAYER_ATTACK_FRAMES,
+  ENEMY_ATTACK_FRAMES,
+  DEATH_DELAY,
+} = require("./utils/constants");
 const { makeid } = require("./utils/utilities");
 const port = 3001;
 
 //connect to mongoDB
-const conn = "mongodb+srv://admin3:X4uYaOWllwAHo24E@cluster0.u6wia.mongodb.net/?retryWrites=true&w=majority";
+const conn = "mongodb://mongo:27017/game";
 
 mongoose.connect(
   conn,
@@ -38,7 +43,13 @@ mongoose.connect(
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true, exposedHeaders: ["set-cookie"] }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  })
+);
 
 const sessionStore = MongoStore.create({ mongoUrl: conn });
 
@@ -48,7 +59,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: { maxAge: new Date(Date.now() + 360000) },
+    cookie: { maxAge: 60 * 60 * 24 * 7 * 100 },
   })
 );
 
@@ -65,9 +76,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+//Passport
 app.use(passport.initialize());
 app.use(passport.session());
-//Middleware
+
+//Express Routes
 app.use("/api/user/", userRoutes);
 app.use("/auth/", oAuthRoutes);
 app.use("/api/leaderboard/", leaderboardRoutes);
@@ -79,8 +92,6 @@ const roomToState = {};
 const publicRoomIds = [];
 
 io.on("connection", (client) => {
-  console.log("Client id:", client.id);
-
   client.on("keyDown", keyDown);
   client.on("keyUp", keyUp);
   client.on("createdRoom", createRoom);
@@ -88,7 +99,7 @@ io.on("connection", (client) => {
   client.on("joinPublicRoom", joinPublicRoom);
 
   function joinPublicRoom(username) {
-    if(publicRoomIds.length > 0) {
+    if (publicRoomIds.length > 0) {
       const publicRoomId = publicRoomIds.shift();
       joinRoom(publicRoomId, username);
     } else {
@@ -104,7 +115,7 @@ io.on("connection", (client) => {
     clientToRoom[client.id] = roomId;
     roomToState[roomId] = state;
     roomToUsers[roomId] = [username];
-    if(isPublicRoom) publicRoomIds.push(roomId);
+    if (isPublicRoom) publicRoomIds.push(roomId);
     client.emit("init", roomId);
   }
 
@@ -138,20 +149,25 @@ io.on("connection", (client) => {
     const state = roomToState[roomId];
     if (!state.players[client.role - 1].isDying) {
       switch (key) {
-        case "a":
-          state.players[client.role - 1].velocity.x = -CHARACTER_HORIZONTAL_SPEED;
+        case "a": //LEFT
+          state.players[client.role - 1].velocity.x =
+            -CHARACTER_HORIZONTAL_SPEED;
           break;
-        case "d":
-          state.players[client.role - 1].velocity.x = CHARACTER_HORIZONTAL_SPEED;
+        case "d": //RIGHT
+          state.players[client.role - 1].velocity.x =
+            CHARACTER_HORIZONTAL_SPEED;
           break;
-        case "w":
+        case "w": //ATTACK
           if (state.players[client.role - 1].onGround) {
             state.players[client.role - 1].velocity.y = CHARACTER_JUMP_OFFSET;
             state.players[client.role - 1].onGround = false;
           }
           break;
-        case "s":
-          const settings = client.role === 1 ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 } : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
+        case "s": //JUMP
+          const settings =
+            client.role === 1
+              ? { frames: PLAYER_ATTACK_FRAMES, delay: 1000 }
+              : { frames: ENEMY_ATTACK_FRAMES, delay: 0 };
           if (!state.players[client.role - 1].attacking) {
             state.players[client.role - 1].attacking = true;
             setTimeout(() => {
@@ -184,7 +200,6 @@ function startGame(state, roomId) {
     const decision = gameLoop(state);
 
     if (!decision) {
-      console.log(JSON.stringify(state));
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     } else {
       if (!gameOverFlag) {
@@ -194,7 +209,7 @@ function startGame(state, roomId) {
         }, DEATH_DELAY);
         gameOverFlag = true;
       }
-      
+
       io.sockets.in(roomId).emit("gameSnapShot", JSON.stringify(state));
     }
   }, 1000 / FRAME_RATE);

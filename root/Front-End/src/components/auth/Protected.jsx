@@ -9,10 +9,9 @@ function ProtectedRoute() {
   const ctx = useContext(myContext);
   const pending = ctx.pending;
   const user = ctx.userObject;
-  console.log(pending + "user " + user);
   return (
     <div>
-      {pending && <CircularProgress/>}
+      {pending && <CircularProgress />}
       {!pending && (user ? <Outlet /> : <Navigate to="login" />)}
     </div>
   );

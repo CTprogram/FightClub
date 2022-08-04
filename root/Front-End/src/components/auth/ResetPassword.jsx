@@ -1,16 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-  useState,
-} from "react";
+import React from "react";
 import styles from "./ResetPassword.module.css";
 import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getExpressBaseURI } from "../../utils/constants";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -19,8 +13,7 @@ const ResetPassword = () => {
   const onSuccess = (responseNum) => {
     if (responseNum === 1) {
       navigate("/login");
-    }
-    else if (responseNum === 2) {
+    } else if (responseNum === 2) {
       navigate("/forgotPassword");
     }
   };
@@ -36,7 +29,7 @@ const ResetPassword = () => {
     formData.append("email", data.email);
     formData.append("resetCode", data.resetCode);
     formData.append("password", data.password);
-    // convert formData to JSON since that is what the server looks for
+    // Convert formData to JSON since that is what the server looks for
     var object = {};
     formData.forEach(function (value, key) {
       object[key] = value;
@@ -56,22 +49,27 @@ const ResetPassword = () => {
     );
     const responseData = await response.json();
     if (response.status === 200) {
-      //on successful login do something
       onSuccess(1);
-      addToast('Reset password Successfully Completed', { appearance: 'success', autoDismiss: true });
+      addToast("Reset password Successfully Completed", {
+        appearance: "success",
+        autoDismiss: true,
+      });
       document.getElementById("resetPassword-form").reset();
     } else if (response.status === 401) {
-      //invalid password or email
       if (responseData.error.includes("email")) {
-        addToast('Invalid Email', { appearance: 'error', autoDismiss: true });
+        addToast("Invalid Email", { appearance: "error", autoDismiss: true });
+      } else {
+        addToast("Invalid Reset Code", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       }
-      else {
-        addToast('Invalid Reset Code', { appearance: 'error', autoDismiss: true });
-      }
-
     } else if (response.status === 410) {
       onSuccess(2);
-      addToast('Expired Reset Code', { appearance: 'error', autoDismiss: true });
+      addToast("Expired Reset Code", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
 
