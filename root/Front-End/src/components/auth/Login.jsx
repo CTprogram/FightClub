@@ -57,7 +57,9 @@ const Login = () => {
     }
   };
 
+
   const googleLogin = () => {
+    console.log('hello i have changed')
     window.open(`${getExpressBaseURI()}/auth/google`, "_self");
     ctx.startPending();
   };
