@@ -1,5 +1,7 @@
 # Project Proposal: Fight club
 
+# Demo link: https://youtu.be/fABrh_cSvno
+
 # Title:
 
 Fight club.
@@ -52,6 +54,11 @@ For the final version of the application we want to introduce the following feat
 - Add 3d rendering and animations to our application. 
 - Tournaments (optional).
 
+## Documentation
+
+### API DOCUMENTATION: 
+
+- https://app.swaggerhub.com/apis-docs/ICLEMJACKO/Fight-Club/1.0.0#/
 
 ## Team Members
 
