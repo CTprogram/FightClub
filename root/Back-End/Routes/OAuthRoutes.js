@@ -48,8 +48,8 @@ router.get("/google", passport.authenticate("google", { scope: ["email", "profil
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost/home",
-    failureRedirect: "http://localhost/login",
+    successRedirect: "https://fight-club.tech/home",
+    failureRedirect: "https://fight-club.tech/login",
   })
 );
 
