@@ -3,6 +3,6 @@ import React from "react";
 import { getExpressBaseURI } from "./constants";
 
 export const socket = io({
-    path: '/mysocket'
-})
+  path: "/mysocket",
+});
 export const SocketContext = React.createContext();

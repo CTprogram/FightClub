@@ -5,8 +5,7 @@ import "./index.css";
 import Context from "./utils/context";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <Context>
-      <App/>
-    </Context>
+  <Context>
+    <App />
+  </Context>
 );
-

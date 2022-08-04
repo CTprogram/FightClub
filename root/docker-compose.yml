@@ -31,4 +31,3 @@ services:
     volumes:
       - /app/node_modules
       - ./Front-End:/app
-

@@ -15,13 +15,13 @@ spec:
         app: client
     spec:
       containers:
-      - name: client
-        image: sahilhakimi/client-api-new:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: VITE_EXPRESS_URI
-          value: http://137.184.241.207:80
+        - name: client
+          image: sahilhakimi/client-api-new:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: VITE_EXPRESS_URI
+              value: http://137.184.241.207:80
 
 ---
 apiVersion: v1

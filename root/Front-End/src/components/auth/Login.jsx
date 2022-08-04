@@ -5,7 +5,7 @@ import Card from "../UI/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { myContext } from "../../utils/context";
 import { getExpressBaseURI } from "../../utils/constants";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -44,22 +44,28 @@ const Login = () => {
       body: JSON.stringify(object),
     });
     const responseData = await response.json();
-    console.log(responseData);
 
     if (response.status === 200) {
       onSuccess();
-      addToast('Logged in Successfully', { appearance: 'success', autoDismiss: true });
+      addToast("Logged in Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      });
       document.getElementById("login-form").reset();
     } else if (response.status === 401) {
-      addToast('Invalid password or email', { appearance: 'error', autoDismiss: true });
+      addToast("Invalid password or email", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     } else if (response.status === 400) {
-      addToast('Email or password missing.', { appearance: 'error', autoDismiss: true });
+      addToast("Email or password missing.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
 
-
   const googleLogin = () => {
-    console.log('hello i have changed')
     window.open(`${getExpressBaseURI()}/auth/google`, "_self");
     ctx.startPending();
   };
@@ -68,11 +74,31 @@ const Login = () => {
     <div className={styles.container}>
       <Card className={styles.card}>
         <div className={styles.formTitle}>Log In</div>
-        <form id="login-form" className={styles.formContainer} onSubmit={handleSubmit2(onSubmitLogin)}>
+        <form
+          id="login-form"
+          className={styles.formContainer}
+          onSubmit={handleSubmit2(onSubmitLogin)}
+        >
           <div className={styles.formElementTitle}>Username </div>
-          <input type="text" autoComplete="username" name="username" {...register2("username", { maxLength: 30 })} className={styles.formInput} placeholder="Enter a username" required />
+          <input
+            type="text"
+            autoComplete="username"
+            name="username"
+            {...register2("username", { maxLength: 30 })}
+            className={styles.formInput}
+            placeholder="Enter a username"
+            required
+          />
           <div className={styles.formElementTitle}>Password </div>
-          <input type="password" autoComplete="current-password" name="password" {...register2("password")} className={styles.formInput} placeholder="Enter a password" required />
+          <input
+            type="password"
+            autoComplete="current-password"
+            name="password"
+            {...register2("password")}
+            className={styles.formInput}
+            placeholder="Enter a password"
+            required
+          />
 
           <button id="signin" name="signin" className={styles.signBtn}>
             Log In
@@ -80,14 +106,6 @@ const Login = () => {
 
           <div className={styles.optionalText}>Or login with</div>
 
-          <div className={styles.btnContainer}>
-            <button onClick={googleLogin} id="authSignin" name="auth" className={styles.authBtn}>
-              Google
-            </button>
-            <button id="authSignin" name="auth" className={styles.authBtn}>
-              Facebook
-            </button>
-          </div>
           <Link to="/forgotPassword" className={styles.forgetPasswordlink}>
             Forgot Password?
           </Link>

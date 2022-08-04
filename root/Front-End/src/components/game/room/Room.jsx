@@ -7,7 +7,7 @@ import { useState, useContext, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { myContext } from "../../../utils/context";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 
 const Backdrop = (props) => {
   return <div className={styles.backdrop} onClick={props.cancelPlayHandler} />;
@@ -41,14 +41,17 @@ const RoomOverlay = (props) => {
   };
 
   const handleGameInProgress = () => {
-    addToast('Room has game in progress', { appearance: 'error', autoDismiss: true });
+    addToast("Room has game in progress", {
+      appearance: "error",
+      autoDismiss: true,
+    });
     navigate("/home");
-  }
+  };
 
   const handleInvalidRoom = () => {
-    addToast('Invalid room code', { appearance: 'error', autoDismiss: true });
+    addToast("Invalid room code", { appearance: "error", autoDismiss: true });
     navigate("/home");
-  }
+  };
 
   useEffect(() => {
     socket.once("gameInProgress", handleGameInProgress);
@@ -72,7 +75,13 @@ const RoomOverlay = (props) => {
           <h2>Join Room</h2>
         </header>
         <div className={styles.joinGame}>
-          <TextField onChange={handleCodeChange} value={code} id="outlined-basic" label="Room ID" variant="outlined" />
+          <TextField
+            onChange={handleCodeChange}
+            value={code}
+            id="outlined-basic"
+            label="Room ID"
+            variant="outlined"
+          />
           <Button onClick={joinRoom} variant="contained">
             Join
           </Button>
@@ -95,8 +104,14 @@ const RoomOverlay = (props) => {
 const Room = (props) => {
   return (
     <React.Fragment>
-      {ReactDOM.createPortal(<Backdrop cancelPlayHandler={props.cancelPlayHandler} />, document.getElementById("backdrop-root"))}
-      {ReactDOM.createPortal(<RoomOverlay />, document.getElementById("overlay-root"))}
+      {ReactDOM.createPortal(
+        <Backdrop cancelPlayHandler={props.cancelPlayHandler} />,
+        document.getElementById("backdrop-root")
+      )}
+      {ReactDOM.createPortal(
+        <RoomOverlay />,
+        document.getElementById("overlay-root")
+      )}
     </React.Fragment>
   );
 };

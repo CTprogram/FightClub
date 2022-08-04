@@ -12,7 +12,11 @@ const MainPage = () => {
       <div className={styles.content}>
         <div className={styles.welcomeTitle}>Welcome to Fight Club!</div>
 
-        <div className={styles.description}> Where you are able to bash your opponent down and claim glorious victory</div>
+        <div className={styles.description}>
+          {" "}
+          Where you are able to bash your opponent down and claim glorious
+          victory
+        </div>
         <div className={styles.btnContainer}>
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
@@ -43,7 +47,12 @@ const MainPage = () => {
           </motion.div>
         </div>
       </div>
-      <motion.div initial={{ opacity: 0, x: 500 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 2 }} className={styles.canvasContainer}>
+      <motion.div
+        initial={{ opacity: 0, x: 500 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 2 }}
+        className={styles.canvasContainer}
+      >
         <Canvas>
           <OrbitControls />
           <ambientLight />

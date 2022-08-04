@@ -16,7 +16,14 @@ const BG_COLOUR = "#231f20";
 let playerOne, playerTwo;
 let background;
 class Sprite {
-  constructor(position, imgSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 }, ctx) {
+  constructor(
+    position,
+    imgSrc,
+    scale = 1,
+    framesMax = 1,
+    offset = { x: 0, y: 0 },
+    ctx
+  ) {
     this.position = position;
     this.image = new Image();
     this.image.src = imgSrc;
@@ -52,7 +59,7 @@ class Sprite {
       if (this.framesCurrent < this.framesMax - 1) {
         this.framesCurrent++;
       } else {
-        if(!halt) this.framesCurrent = 0;
+        if (!halt) this.framesCurrent = 0;
       }
     }
   }
@@ -63,7 +70,15 @@ class Sprite {
 }
 
 class Fighter extends Sprite {
-  constructor({ position, velocity, attackBox, attacking }, offset, sprites, ctx, imgSrc, scale = 1, framesMax = 1) {
+  constructor(
+    { position, velocity, attackBox, attacking },
+    offset,
+    sprites,
+    ctx,
+    imgSrc,
+    scale = 1,
+    framesMax = 1
+  ) {
     super(position, imgSrc, scale, framesMax, offset, ctx);
     this.velocity = velocity;
     this.width = 50;
@@ -113,7 +128,6 @@ class Fighter extends Sprite {
         }
         break;
       case "attack1":
-        console.log('attacking sprite');
         if (this.image !== this.sprites.attack1.image) {
           this.image = this.sprites.attack1.image;
           this.framesMax = this.sprites.attack1.framesMax;
@@ -139,12 +153,17 @@ class Fighter extends Sprite {
 const handleGameState = (gameState, canvas, ctx, initialized) => {
   if (!initialized) {
     playerOne = new Fighter(
-      { position: { x: 0, y: 200 }, velocity: { x: 0, y: 0 }, attackBox: { x: 0, y: 0 }, attacking: false },
+      {
+        position: { x: 0, y: 200 },
+        velocity: { x: 0, y: 0 },
+        attackBox: { x: 0, y: 0 },
+        attacking: false,
+      },
       { x: 300, y: 230 },
-      { 
-        idle: { imgSrc: pOneIdleImage, framesMax: 10 }, 
-        run: { imgSrc: pOneRunImage, framesMax: 8 }, 
-        jump: { imgSrc: pOneJumpImage, framesMax: 3 }, 
+      {
+        idle: { imgSrc: pOneIdleImage, framesMax: 10 },
+        run: { imgSrc: pOneRunImage, framesMax: 8 },
+        jump: { imgSrc: pOneJumpImage, framesMax: 3 },
         fall: { imgSrc: pOneFallImage, framesMax: 3 },
         attack1: { imgSrc: pOneAttack1Image, framesMax: 7 },
         death: { imgSrc: pOneDeath, framesMax: 7 },
@@ -155,14 +174,19 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
       10
     );
     playerTwo = new Fighter(
-      { position: { x: 0, y: 200 }, velocity: { x: 0, y: 0 }, attackBox: { x: 0, y: 0 }, attacking: false },
+      {
+        position: { x: 0, y: 200 },
+        velocity: { x: 0, y: 0 },
+        attackBox: { x: 0, y: 0 },
+        attacking: false,
+      },
       { x: 300, y: 220 },
-      { 
-        idle: { imgSrc: pTwoIdleImage, framesMax: 8 }, 
-        run: { imgSrc: pTwoRunImage, framesMax: 8 }, 
-        jump: { imgSrc: pTwoJumpImage, framesMax: 2 }, 
+      {
+        idle: { imgSrc: pTwoIdleImage, framesMax: 8 },
+        run: { imgSrc: pTwoRunImage, framesMax: 8 },
+        jump: { imgSrc: pTwoJumpImage, framesMax: 2 },
         fall: { imgSrc: pTwoFallImage, framesMax: 2 },
-        attack1: { imgSrc: pTwoAttack1Image, framesMax: 4 }, 
+        attack1: { imgSrc: pTwoAttack1Image, framesMax: 4 },
         death: { imgSrc: pTwoDeath, framesMax: 6 },
       },
       ctx,
@@ -171,11 +195,11 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
       8
     );
     background = new Sprite(
-      {x: 0, y:0},
+      { x: 0, y: 0 },
       backgroundImage,
       0.5,
       1,
-      {x:0, y:0},
+      { x: 0, y: 0 },
       ctx
     );
   }
@@ -192,24 +216,19 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
   playerTwo.isDying = gameState.players[1].isDying;
 
   //Player one sprite switch up
-  if(!playerOne.isDying) {
-    if(playerOne.attacking) {
-      console.log('attacking');
+  if (!playerOne.isDying) {
+    if (playerOne.attacking) {
       playerOne.switchSprite("attack1");
     } else {
       if (playerOne.velocity.y > 0) {
         playerOne.switchSprite("jump");
-        console.log("jump");
       } else if (playerOne.velocity.y < 0) {
         playerOne.switchSprite("fall");
-        console.log("fall");
       } else {
         if (playerOne.velocity.x != 0) {
           playerOne.switchSprite("run");
-          console.log("run");
         } else {
           playerOne.switchSprite("idle");
-          console.log("idle");
         }
       }
     }
@@ -218,8 +237,8 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
   }
 
   //Player two sprite switch up
-  if(!playerTwo.isDying) {
-    if(playerTwo.attacking){
+  if (!playerTwo.isDying) {
+    if (playerTwo.attacking) {
       playerTwo.switchSprite("attack1");
     } else {
       if (playerTwo.velocity.y > 0) {
@@ -238,7 +257,9 @@ const handleGameState = (gameState, canvas, ctx, initialized) => {
     playerTwo.switchSprite("death");
   }
 
-  requestAnimationFrame(() => paintGame(gameState, canvas, playerOne, playerTwo, ctx, background));
+  requestAnimationFrame(() =>
+    paintGame(gameState, canvas, playerOne, playerTwo, ctx, background)
+  );
 };
 
 const paintGame = (state, canvas, playerOne, playerTwo, ctx) => {

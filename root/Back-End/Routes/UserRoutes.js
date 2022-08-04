@@ -123,7 +123,6 @@ router.post("/login/", function (req, res, next) {
           maxAge: 60 * 60 * 24 * 7,
         })
       );
-      console.log(username + " logged in");
       req.session.username = username;
       return res.status(200).json({ username: username });
     });
@@ -200,7 +199,7 @@ router.put("/forgotPassword/", function (req, res, next) {
       error: "Invalid Email",
     });
   }
-  
+
   user.findOne({ email: req.body.email }, function (err, userDoc) {
     if (err) return res.status(500).json({ error: err });
     if (!userDoc) return res.status(401).json({ error: "Invalid email" });

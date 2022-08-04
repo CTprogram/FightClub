@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import Card from "../UI/Card";
 import { getExpressBaseURI } from "../../utils/constants";
 import { Link, useNavigate } from "react-router-dom";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -45,19 +45,31 @@ const SignUp = () => {
 
     if (response.status === 201) {
       onSuccess();
-      addToast('SignUp in Successfully', { appearance: 'success', autoDismiss: true });
+      addToast("SignUp in Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      });
       document.getElementById("register-form").reset();
     } else if (response.status === 409) {
       if (responseData.error.includes("username")) {
         //username is taken
-        addToast('Username is already taken', { appearance: 'error', autoDismiss: true });
+        addToast("Username is already taken", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       } else {
-        addToast('Email is already in use', { appearance: 'error', autoDismiss: true });
+        addToast("Email is already in use", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       }
     } else if (response.status === 500) {
-      addToast('Server Error occured while trying to sign up', { appearance: 'error', autoDismiss: true });
+      addToast("Server Error occured while trying to sign up", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     } else {
-      addToast('Could not sign up', { appearance: 'error', autoDismiss: true });
+      addToast("Could not sign up", { appearance: "error", autoDismiss: true });
     }
   };
 
@@ -65,17 +77,52 @@ const SignUp = () => {
     <div className={styles.container}>
       <Card className={styles.card}>
         <div className={styles.formTitle}>Sign Up</div>
-        <form id="register-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmitRegister)}>
+        <form
+          id="register-form"
+          className={styles.formContainer}
+          onSubmit={handleSubmit(onSubmitRegister)}
+        >
           <div className={styles.formElementTitle}>Username</div>
-          <input type="text" id="registerUsername" autoComplete="username" {...register("username", { maxLength: 30 })} className={styles.formElement} placeholder="Enter a username" required />
-          {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
+          <input
+            type="text"
+            id="registerUsername"
+            autoComplete="username"
+            {...register("username", { maxLength: 30 })}
+            className={styles.formElement}
+            placeholder="Enter a username"
+            required
+          />
+          {errors.name && errors.name.type === "maxLength" && (
+            <span>Max length exceeded</span>
+          )}
           <div className={styles.formElementTitle}>Password</div>
-          <input type="password" id="registerPassword" autoComplete="new-password" {...register("password")} className={styles.formElement} placeholder="Enter a password" required />
+          <input
+            type="password"
+            id="registerPassword"
+            autoComplete="new-password"
+            {...register("password")}
+            className={styles.formElement}
+            placeholder="Enter a password"
+            required
+          />
 
           <div className={styles.formElementTitle}>Email</div>
-          <input type="email" id="email" {...register("email")} autoComplete="email" className={styles.formElement} placeholder="Enter your Email" required />
+          <input
+            type="email"
+            id="email"
+            {...register("email")}
+            autoComplete="email"
+            className={styles.formElement}
+            placeholder="Enter your Email"
+            required
+          />
 
-          <button type="submit" id="signup" name="action" className={styles.signBtn}>
+          <button
+            type="submit"
+            id="signup"
+            name="action"
+            className={styles.signBtn}
+          >
             Sign Up
           </button>
 

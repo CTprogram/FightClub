@@ -14,7 +14,8 @@ passport.deserializeUser((user, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "969850809285-nv8oksir0hies132uu5d9vcljvkdt0je.apps.googleusercontent.com",
+      clientID:
+        "969850809285-nv8oksir0hies132uu5d9vcljvkdt0je.apps.googleusercontent.com",
       clientSecret: "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",
       callbackURL: "/auth/google/callback",
       passReqToCallback: true,
@@ -43,7 +44,10 @@ passport.use(
   )
 );
 
-router.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
 
 router.get(
   "/google/callback",
