@@ -1,11 +1,11 @@
 # Project Proposal: Fight club
 
-# Demo link: https://youtu.be/fABrh_cSvno
-# Website Link: https://www.fight-club.tech/
+### Demo link: https://youtu.be/fABrh_cSvno
+### Website Link: https://www.fight-club.tech/
 
-# Controls:
+### Controls:
 
-## ATTACK: s, JUMP: w, LEFT: a, RIGHT: d
+### ATTACK: s, JUMP: w, LEFT: a, RIGHT: d
 
 # Title:
 
